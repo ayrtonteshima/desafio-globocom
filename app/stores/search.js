@@ -1,26 +1,21 @@
 import * as searchModel from './../models/search';
 
-function filterHightlights(term, { hightlights }) {
-    return hightlights;
-}
+const filterHightlights = (term, { hightlights }) => hightlights;
 
-function filterSuggestions(term, { suggestions }) {
-    return suggestions;
-}
+const filterSuggestions = (term, { suggestions }) => suggestions;
 
-function filter(request, data) {
-    const hightlights = filterHightlights(request, data);
-    const suggestions = filterSuggestions(request, data);
+function getDataFiltered(term, data) {
+    const hightlights = filterHightlights(term, data);
+    const suggestions = filterSuggestions(term, data);
     return {
         hightlights,
         suggestions,
     };
 }
 
-export function getDataFiltered(request) {
-    return searchModel.get().then((data) => {
+export function filter(request) {
+    return searchModel.get().then(data => {
         const { q } = request.params;
-        const dataFiltered = filter(q, data);
-        return Promise.resolve(dataFiltered);
+        return Promise.resolve(getDataFiltered(q, data));
     });
 }

@@ -3,5 +3,5 @@ import * as searchHandlers from './../handlers/search';
 export default {
     method: 'GET',
     path: '/search/{q?}',
-    handler: searchHandlers.getDataFiltered,
+    handler: searchHandlers.filter,
 };

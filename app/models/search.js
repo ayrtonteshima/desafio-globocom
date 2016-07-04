@@ -5,7 +5,7 @@ function getAll(data = null) {
     // if (data) return data;
 
     // Aqui vem a requisição para ir ao mongo/redis pegar os dados
-    //- Code
+    // Code
     // fim
 
     return Promise.resolve(data);
