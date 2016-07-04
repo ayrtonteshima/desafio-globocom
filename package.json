@@ -6,7 +6,7 @@
   "scripts": {
     "test": "test",
     "lint": "./node_modules/.bin/eslint --cache .",
-    "start": "webpack-dev-server"
+    "start": "nodemon ./index.js"
   },
   "repository": {
     "type": "git",
@@ -42,10 +42,12 @@
     "karma": "^1.1.0",
     "karma-chrome-launcher": "^1.0.1",
     "karma-jasmine": "^1.0.2",
+    "nodemon": "^1.9.2",
     "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
-    "hapi": "^13.4.1"
+    "hapi": "^13.4.1",
+    "vision": "^4.1.0"
   }
 }

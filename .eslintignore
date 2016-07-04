@@ -2,3 +2,4 @@ node_modules/
 test/
 karma.conf.js
 webpack.config.js
+mocks
