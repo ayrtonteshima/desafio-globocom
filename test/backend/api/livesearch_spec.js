@@ -8,9 +8,7 @@ var urlSearch = URL + 'search';
 /****************************************************************/
 
 frisby.create('Testa formato da API')
-    .get(urlSearch, {
-        q: 'apu'
-    })
+    .get(`${urlSearch}/apu`)
     .expectStatus(200)
     .expectJSONTypes({
         statusCode: Number,
@@ -42,9 +40,7 @@ frisby.create('Testa retorno com os tipos corretos na propriedade hightlights')
 /****************************************************************/
 
 frisby.create('Testa se hightlights retorna dados corretos quando passado Política como title')
-        .get(urlSearch, {
-            q: 'apu'
-        })
+        .get(`${urlSearch}/Política`)
         .expectStatus(200)
         .expectJSONTypes('data', {
             hightlights: Array
@@ -69,9 +65,7 @@ frisby.create('Testa se hightlights retorna dados corretos quando passado Polít
 /****************************************************************/
 
 frisby.create('Testa suggestions, deve retornar termos iniciando com "mus"')
-        .get(urlSearch, {
-            q: 'mus'
-        })
+        .get(`${urlSearch}/mus`)
         .expectStatus(200)
         .expectJSON('data', {
             suggestions: function(suggestion) {
