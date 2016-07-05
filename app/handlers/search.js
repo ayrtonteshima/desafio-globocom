@@ -5,13 +5,13 @@ export function filter(request, reply) {
         reply({
             statusCode: 200,
             message: 'Resultado retornado com sucesso',
-            data: data
+            data,
         });
     }).catch(err => {
         reply({
             statusCode: 404,
             message: err,
-            data: []
-        })
+            data: [],
+        });
     });
 }
