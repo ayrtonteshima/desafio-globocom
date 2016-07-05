@@ -20,7 +20,16 @@ frisby.create('Testa formato da API')
             suggestions: Array
         }
     })
-    .expectJSONTypes('data.*', {
+    .toss();
+
+
+/****************************************************************/
+/****************************************************************/
+
+frisby.create('Testa retorno com os tipos corretos na propriedade hightlights')
+    .get(urlSearch)
+    .expectStatus(200)
+    .expectJSONTypes('data.hightlights.*', {
         title: String,
         url: String,
         logo: String,
@@ -32,14 +41,15 @@ frisby.create('Testa formato da API')
 /****************************************************************/
 /****************************************************************/
 
-frisby.create('Deve retornar hightlights com title de Política')
+frisby.create('Testa se hightlights retorna dados corretos quando passado Política como title')
         .get(urlSearch, {
             q: 'apu'
         })
+        .expectStatus(200)
         .expectJSONTypes({
             hightlights: Array
         })
-        .expectJSON('hightlights.?', {
+        .expectJSON('data.hightlights.?', {
             title:'Política',
             url:'http://g1.globo.com/politica/index.html',
             logo: 'http://s.glbimg.com/bu/i/fc/5fb2e18d-a47f-4bb8-9a7e-b66871cf53c0.png',
@@ -57,18 +67,16 @@ frisby.create('Deve retornar hightlights com title de Política')
 /****************************************************************/
 /****************************************************************/
 
-frisby.create('Testando suggestions, deve retornar termos iniciando com "mus"')
+frisby.create('Testa suggestions, deve retornar termos iniciando com "mus"')
         .get(urlSearch, {
             q: 'mus'
         })
-        .expectJSONTypes({
-            suggestions: Array
-        })
-        .expectJSON({
-            suggestions: function(val) {
-                expect(val).toContain('musica');
-                expect(val).toContain('musica de anderson freire');
-                expect(val).toContain('musica que neymar pediu');
+        .expectStatus(200)
+        .expectJSON('data', {
+            suggestions: function(suggestion) {
+                expect(suggestion).toContain('musica');
+                expect(suggestion).toContain('musica de anderson freire');
+                expect(suggestion).toContain('musica que neymar pediu');
             }
         })
         .toss();
