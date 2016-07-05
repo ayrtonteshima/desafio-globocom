@@ -61,6 +61,7 @@ frisby.create('Testa se hightlights retorna dados corretos quando passado Polít
                 'apuração'
             ]
         })
+        .expectJSONLength('data.hightlights', 1)
         .toss();
 
 
@@ -79,4 +80,5 @@ frisby.create('Testa suggestions, deve retornar termos iniciando com "mus"')
                 expect(suggestion).toContain('musica que neymar pediu');
             }
         })
+        .expectJSONLength('data.suggestions', 3)
         .toss();
