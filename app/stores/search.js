@@ -17,5 +17,7 @@ export function filter(request) {
     return searchModel.get().then(data => {
         const { q } = request.params;
         return Promise.resolve(getDataFiltered(q, data));
+    }).catch(err => {
+        return Promise.reject(err);
     });
 }
