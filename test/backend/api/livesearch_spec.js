@@ -46,7 +46,7 @@ frisby.create('Testa se hightlights retorna dados corretos quando passado Polít
             q: 'apu'
         })
         .expectStatus(200)
-        .expectJSONTypes({
+        .expectJSONTypes('data', {
             hightlights: Array
         })
         .expectJSON('data.hightlights.?', {
