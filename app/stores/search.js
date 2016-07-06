@@ -11,12 +11,14 @@ const accentsTidy = (s) => {
     return r;
 };
 
-const regExpTextCompare = (value) => new RegExp(`${accentsTidy(value)}`, 'ig');
+const regExpTextCompare = (haystack, needle) => (
+    new RegExp(`${accentsTidy(needle)}`, 'ig').test(accentsTidy(haystack))
+)
 
-const searchTermArray = (arr = [], term = '') => {
+const searchTermArray = (arr = [], needle = '') => {
     let found = false;
-    arr.forEach((value) => {
-        if (regExpTextCompare(term).test(accentsTidy(value))) {
+    arr.forEach((haystack) => {
+        if (regExpTextCompare(haystack, needle)) {
             found = true;
         }
     });
@@ -25,12 +27,13 @@ const searchTermArray = (arr = [], term = '') => {
 
 const filterHightlights = (term, { hightlights }) => {
     if (!term) return hightlights;
-    const hightlightsFiltered = hightlights.filter(({ queries }) => searchTermArray(queries, term));
-
-    return hightlightsFiltered;
+    return hightlights.filter(({ queries }) => searchTermArray(queries, term));
 };
 
-const filterSuggestions = (term, { suggestions }) => suggestions;
+const filterSuggestions = (term, { suggestions }) => {
+    if (!term) return suggestions;
+    return suggestions.filter((haystack) => regExpTextCompare(haystack, term));
+};
 
 function getDataFiltered(term, data) {
     const hightlights = filterHightlights(term, data);
