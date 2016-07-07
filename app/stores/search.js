@@ -16,12 +16,13 @@ const regExpTextCompare = (haystack, needle) => (
 );
 
 const searchTermArray = (arr = [], needle = '') => {
+    const total = arr.length;
     let found = false;
-    arr.forEach((haystack) => {
-        if (regExpTextCompare(haystack, needle)) {
-            found = true;
-        }
-    });
+    let count = 0;
+    while (!found) {
+        if (count >= total) break;
+        found = regExpTextCompare(arr[count++], needle);
+    }
     return found;
 };
 
