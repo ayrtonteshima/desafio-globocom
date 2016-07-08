@@ -1,5 +1,12 @@
 import * as searchModel from './../models/search';
 
+/**
+ * Remove acentos e converte para minusculo para não ter problemas na hora de buscar o termo
+ *
+ * @constructor
+ * @param   {String} s - Termo que vai perder os acentos e ser convertido par minusculo.
+ * @returns {String} - String com alterações
+ */
 const accentsTidy = (s) => {
     let r = s.toLowerCase();
     r = r.replace(new RegExp(/[àáâãäå]/g), 'a');
@@ -15,6 +22,7 @@ const regExpTextCompare = (haystack, needle) => (
     new RegExp(`${accentsTidy(needle)}`, 'ig').test(accentsTidy(haystack))
 );
 
+
 const searchTermArray = (arr = [], needle = '') => {
     const total = arr.length;
     let found = false;
@@ -26,15 +34,18 @@ const searchTermArray = (arr = [], needle = '') => {
     return found;
 };
 
+
 const filterHightlights = ({ term }, { hightlights }) => {
     if (!term) return hightlights;
     return hightlights.filter(({ queries }) => searchTermArray(queries, term));
 };
 
+
 const filterSuggestions = ({ term }, { suggestions }) => {
     if (!term) return suggestions;
     return suggestions.filter((haystack) => regExpTextCompare(haystack, term));
 };
+
 
 export function filter(request) {
     return searchModel.get().then(data => {
