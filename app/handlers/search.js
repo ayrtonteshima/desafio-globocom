@@ -7,10 +7,10 @@ export function filter(request, reply) {
             message: 'Resultado retornado com sucesso',
             data,
         });
-    }).catch(err => {
+    }).catch(() => {
         reply({
             statusCode: 404,
-            message: err,
+            message: 'Ops! erro ao buscar',
             data: [],
         });
     });
