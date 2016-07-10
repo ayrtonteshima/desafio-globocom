@@ -2,3 +2,4 @@ node_modules
 .eslintcache
 npm-debug.log
 test/frontend/npm-debug.log
+public/*
