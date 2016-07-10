@@ -3,3 +3,4 @@ test/
 karma.conf.js
 webpack.config.js
 mocks
+public
