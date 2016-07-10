@@ -5,7 +5,7 @@ import {
     REQUEST_FAILURE
 } from './../../../app/frontend/constants/ActionsTypes';
 
-describe("Requests reducer", () => {
+describe("Requests reducers de requests", () => {
     const term = 'mús';
 
     it("Deve retornar o estado inicial", () => {
@@ -92,11 +92,11 @@ describe("Requests reducer", () => {
     });
 
     it("Manipula REQUEST_FAILURE", () => {
-        expect({
+        expect(reducer({
             type: REQUEST_FAILURE,
             term,
             data: []
-        }).toEqual({
+        })).toEqual({
             loading: false,
             term: 'mús',
             openAutocomplete: true
