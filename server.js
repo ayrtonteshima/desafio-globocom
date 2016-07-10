@@ -1,5 +1,6 @@
 import Hapi from 'hapi';
 import Vision from 'vision';
+import Inert from 'inert';
 import serverConfig from './app/configs/server';
 import Routes from './app/routes/routes';
 
@@ -7,11 +8,10 @@ const server = new Hapi.Server();
 
 const plugins = [
     Vision,
+    Inert,
 ];
 
 server.connection(serverConfig);
-
-server.route(Routes);
 
 export default function start(done) {
     server.register(plugins, (err) => {
@@ -19,6 +19,8 @@ export default function start(done) {
             return done(err);
         }
 
+        server.route(Routes);
+        
         return server.start(serverErr => {
             if (serverErr) {
                 return done(serverErr);
