@@ -1,9 +1,9 @@
-import reducer from './../../../app/frontend/reducers/';
+import reducer from './../../../../../app/frontend/components/search/reducers/';
 import {
     REQUEST_INIT,
     REQUEST_SUCCESS,
     REQUEST_FAILURE
-} from './../../../app/frontend/constants/ActionsTypes';
+} from './../../../../../app/frontend/components/search/constants/ActionsTypes';
 
 describe("Requests reducers de requests", () => {
     const term = 'mús';

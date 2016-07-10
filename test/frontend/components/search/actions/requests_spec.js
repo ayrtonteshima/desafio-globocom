@@ -1,12 +1,12 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import nock from 'nock';
-import * as requestsAction from './../../../app/frontend/actions/requests';
+import * as requestsAction from './../../../../../app/frontend/components/search/actions/requests';
 import {
     REQUEST_INIT,
     REQUEST_SUCCESS,
     REQUEST_FAILURE
-} from './../../../app/frontend/constants/ActionsTypes';
+} from './../../../../../app/frontend/components/search/constants/ActionsTypes';
 
 const middlewares = [ thunk ];
 const mockStore = configureMockStore(middlewares);

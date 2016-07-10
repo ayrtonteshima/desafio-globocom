@@ -1,4 +1,4 @@
-import interactionsAction from './../../../app/frontend/actions/interactions';
+import interactionsAction from './../../../../../app/frontend/components/search/actions/interactions';
 import {
     LIST_KEY_UP,
     LIST_KEY_DOWN,
@@ -7,7 +7,7 @@ import {
     LIST_KEY_ESC,
     LIST_KEY_ENTER,
     LIST_MOUSE_OVER
-} from './../../../app/frontend/constants/ActionsTypes';
+} from './../../../../../app/frontend/components/search/constants/ActionsTypes';
 
 describe("Testando action creators de interactions do teclado", () => {
     const KEY_ENTER     = 13;

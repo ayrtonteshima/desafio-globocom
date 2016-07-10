@@ -1,4 +1,4 @@
-import reducer from './../../../app/frontend/reducers/';
+import reducer from './../../../../../app/frontend/components/search/reducers/';
 import {
     LIST_KEY_UP,
     LIST_KEY_DOWN,
@@ -7,7 +7,7 @@ import {
     LIST_KEY_ESC,
     LIST_KEY_ENTER,
     LIST_MOUSE_OVER
-} from './../../../app/frontend/constants/ActionsTypes';
+} from './../../../../../app/frontend/components/search/constants/ActionsTypes';
 
 describe("Testando reducers de interactions", () => {
     const initialState = {
