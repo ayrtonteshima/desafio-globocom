@@ -61,6 +61,8 @@
   "dependencies": {
     "hapi": "^13.4.1",
     "joi": "^8.4.2",
+    "redux": "^3.5.2",
+    "redux-thunk": "^2.1.0",
     "vision": "^4.1.0"
   }
 }
