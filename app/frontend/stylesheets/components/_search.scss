@@ -1,0 +1,70 @@
+$searchComponentWidth: 170px;
+$searchComponentWidthOpened: 220px;
+
+.search-component {
+    width: $searchComponentWidth;
+    position: relative;
+
+    &, div, ul, li, img, input, label {
+        box-sizing: border-box;
+    }
+
+    &__form {
+        width: 100%;
+        display: block;
+    }
+
+    label {
+        height: 35px;
+        width: 30px;
+        display: inline-block;
+        position: absolute;
+        background: transparent url('../img/search-focus.svg') no-repeat center;
+        background-size: 45%;
+        left: 0;
+        top: 0;
+        transition: all .2s ease;
+    }
+
+    &__field {
+        width: $searchComponentWidth;
+        height: 35px;
+        background-color: $darkRed;
+        border: 0;
+        border-radius: 3px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, .4) inset;
+        padding-left: 30px;
+        transition: all .2s ease;
+        font-size: 14px;
+        color: #fff;
+
+        @include placeholder {
+            color: #fff;
+            font-weight: 500;
+            font-family: arial;
+            font-size: 12px;
+        }
+
+        &, &:focus, &:active, &:hover {
+            outline: 0;
+        }
+
+        &:focus {
+            width: $searchComponentWidthOpened;
+            margin-left: -($searchComponentWidthOpened - $searchComponentWidth);
+            background-color: #FFF;
+            color: #1d1d1d;
+
+            @include placeholder {
+                color: #666;
+                font-weight: bold;
+            }
+
+            &+label {
+                background: transparent url('../img/search.svg') no-repeat center;
+                background-size: 45%;
+                margin-left: -($searchComponentWidthOpened - $searchComponentWidth);
+            }
+        }
+    }
+}

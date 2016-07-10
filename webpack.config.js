@@ -4,13 +4,14 @@ module.exports = {
     entry: __dirname + '/app/frontend/bootstrap.js',
     output: {
         path: __dirname + '/public',
-        filename: '/js/bundle.js'
+        filename: '/js/bundle.js',
+        publicPath: './public/'
     },
     module: {
         loaders: [
             {
                 test: /\.scss$/,
-                loader: ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader')
+                loader: ExtractTextPlugin.extract('style-loader', 'raw-loader!sass-loader')
             },
             {
                 test: /\.jade$/,
