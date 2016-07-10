@@ -54,6 +54,7 @@
     "karma-jasmine": "^1.0.2",
     "karma-nyan-reporter": "^0.2.4",
     "nock": "^8.0.0",
+    "node-sass": "^3.8.0",
     "nodemon": "^1.9.2",
     "redux-mock-store": "^1.1.2",
     "sass-loader": "^4.0.0",
