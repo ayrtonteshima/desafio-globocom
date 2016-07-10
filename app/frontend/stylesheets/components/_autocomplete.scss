@@ -1,8 +1,86 @@
 .autocomplete {
+    width: 290px;
     position: absolute;
+    top: 40px;
+    right: 0;
+    background-color: #fff;
+    border-radius: 3px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    display: none;
+    &--opened {
+        display: block;
+    }
+    &:after, &:before {
+        bottom: 100%;
+        left: 50%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+    }
+    &:after {
+        border-color: transparent;
+        border-bottom-color: #ffffff;
+        border-width: 7px;
+        margin-left: -7px;
+    }
+    &:before {
+        border-color: transparent;
+        border-bottom-color: #ffffff;
+        border-width: 10px;
+        margin-left: -10px;
+    }
+    &, div, span, img, ul, li {
+        box-sizing: border-box;
+    }
+    & > ul {
+        > .autocomplete__item {
+            padding: 10px;
+            border-bottom: 1px solid #dedede;
+            &:nth-child(2) {
+                padding: 5px 0;
+            }
+            &:last-child {
+                border-bottom: 0;
+            }
+        }
+    }
     &__item {
-        &__hightlights {
-            
+        display: block;
+        height: auto;
+        overflow: hidden;
+        font-size: 14px;
+        &-selectable {
+            padding: 5px 10px;
+            border-left: 3px solid transparent;
+            &:hover {
+                border-left: 3px solid $lightRed;
+                background-color: #f1f1f1;
+                color: $lightRed;
+            }
+        }
+        &--hightlights {
+            img {
+                display: inline-block;
+                width: 25%;
+                vertical-align: middle;
+            }
+            span {
+                width: 75%;
+                display: inline-block;
+                font-size: 16px;
+                padding-left: 10px;
+                font-weight: bold;
+            }
+        }
+        &--info {
+            font-style: italic;
+            color: #ccc;
+            font-size: 12px;
+            text-align: right;
+            padding: 5px 10px 0 0;
         }
     }
 }
