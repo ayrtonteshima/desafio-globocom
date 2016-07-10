@@ -20,7 +20,7 @@ export default function start(done) {
         }
 
         server.route(Routes);
-        
+
         return server.start(serverErr => {
             if (serverErr) {
                 return done(serverErr);
