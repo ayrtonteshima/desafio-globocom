@@ -16,7 +16,8 @@ describe("Testando async action de requests", () => {
     const initialState = {
         openAutocomplete: false,
         term: '',
-        indexItemActive: -1
+        indexActiveItem: -1,
+        loading: false
     };
 
     afterEach(() => {
