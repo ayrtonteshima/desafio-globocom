@@ -153,31 +153,4 @@ describe("Testando async action de requests", () => {
                     expect(store.getActions()).toEqual(expectedActions);
                 });
     });
-
-
-    // it("Testa falha da requisição", () => {
-    //     nock("http://localhost:9000")
-    //         .get("/search/mús")
-    //         .reply(404, {
-    //             statusCode: 404,
-    //             message: 'Ops! erro ao buscar',
-    //             data: []
-    //         });
-
-    //     const store = mockStore(stateStore);
-
-    //     const expectedActions = [
-    //         { type: REQUEST_INIT, term: 'mús' },
-    //         {
-    //             type: REQUEST_FAILURE,
-    //             term: 'mús',
-    //             data: []
-    //         }
-    //     ];
-
-    //     return store.dispatch(actions(119, ['mús']))
-    //             .catch(() => {
-    //                 expect(store.getActions()).toEqual(expectedActions);
-    //             });
-    // });
 });

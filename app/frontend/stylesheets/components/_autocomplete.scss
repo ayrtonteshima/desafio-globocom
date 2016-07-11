@@ -39,7 +39,7 @@
         > .autocomplete__item {
             padding: 10px;
             border-bottom: 1px solid #dedede;
-            &:nth-child(2) {
+            &.autocomplete__suggestions {
                 padding: 5px 0;
             }
             &:last-child {
@@ -52,6 +52,11 @@
         height: auto;
         overflow: hidden;
         font-size: 14px;
+        white-space: nowrap;
+        mark {
+            font-weight: bold;
+            background-color: transparent;
+        }
         &-selectable {
             padding: 5px 10px;
             border-left: 3px solid transparent;
@@ -64,15 +69,17 @@
         &--hightlights {
             img {
                 display: inline-block;
-                width: 25%;
+                width: 20%;
                 vertical-align: middle;
             }
             span {
-                width: 75%;
+                width: 80%;
                 display: inline-block;
                 font-size: 16px;
                 padding-left: 10px;
                 font-weight: bold;
+                white-space: normal;
+                vertical-align: middle;
             }
         }
         &--info {

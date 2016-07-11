@@ -98,7 +98,7 @@ describe("Requests reducers de requests", () => {
             term,
             data: { data }
         })).toEqual({
-            openAutocomplete: false,
+            openAutocomplete: true,
             term,
             indexActiveItem: -1,
             loading: false,
@@ -118,7 +118,7 @@ describe("Requests reducers de requests", () => {
             term: 'mús',
             indexActiveItem: -1,
             loading: false,
-            completeTerm: null,
+            completeTerm: null  ,
             goTo: null
         });
     });

@@ -6,3 +6,6 @@ export const LIST_KEY_ESC = 'LIST_KEY_ESC';
 export const LIST_KEY_ENTER = 'LIST_KEY_ENTER';
 export const LIST_KEY_OTHER = 'LIST_KEY_OTHER';
 export const LIST_MOUSE_OVER = 'LIST_MOUSE_OVER';
+export const REQUEST_INIT = 'REQUEST_INIT';
+export const REQUEST_SUCCESS = 'REQUEST_SUCCESS';
+export const REQUEST_FAILURE = 'REQUEST_FAILURE';

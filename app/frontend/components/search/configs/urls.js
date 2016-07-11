@@ -1,1 +1,1 @@
-export const SEARCH_BASE=  'http://g1.globo.com/busca';
+export const SEARCH_BASE = 'http://g1.globo.com/busca';

@@ -43,7 +43,10 @@ $searchComponentWidthOpened: 220px;
         &, &:focus, &:active, &:hover {
             outline: 0;
         }
-        &:focus {
+    }
+
+    &--opened {
+        .search-component__field {
             width: $searchComponentWidthOpened;
             margin-left: -($searchComponentWidthOpened - $searchComponentWidth);
             background-color: #FFF;
