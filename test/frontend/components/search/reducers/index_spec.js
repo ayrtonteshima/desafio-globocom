@@ -28,14 +28,13 @@ describe("Requests reducers de requests", () => {
     });
 
     it("Reducer REQUEST_INIT: Espera state correto para início da requisição", () => {
-        expect(reducer(state, {
+        expect(reducer(initialState, {
             type: REQUEST_INIT,
             term
-        })).toEqual({
-            loading: true,
+        })).toEqual(Object.assign({}, initialState, {
             term,
-            openAutocomplete: false
-        });
+            loading: true
+        }));
     });
 
     it("Reducer REQUEST_SUCCESS: Espera que retorno tenha o state correto com o termo nas suggestions envolvidas pela tag mark", () => {
@@ -79,6 +78,11 @@ describe("Requests reducers de requests", () => {
                 }
             ],
             suggestions: [
+                "musica",
+                "musica de anderson freire",
+                "musica que neymar pediu"
+            ],
+            suggestionsMarked: [
                 "<mark>mus</mark>ica",
                 "<mark>mus</mark>ica de anderson freire",
                 "<mark>mus</mark>ica que neymar pediu"
@@ -105,14 +109,17 @@ describe("Requests reducers de requests", () => {
     });
 
     it("Reducer REQUEST_FAILURE", () => {
-        expect(reducer({
+        expect(reducer(initialState, {
             type: REQUEST_FAILURE,
             term,
             data: []
         })).toEqual({
-            loading: false,
+            openAutocomplete: false,
             term: 'mús',
-            openAutocomplete: true
+            indexActiveItem: -1,
+            loading: false,
+            completeTerm: null,
+            goTo: null
         });
     });
 });
