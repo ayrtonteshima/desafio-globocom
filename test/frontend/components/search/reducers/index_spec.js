@@ -1,4 +1,4 @@
-import reducer from './../../../../../app/frontend/components/search/reducers/';
+import reducer from './../../../../../app/frontend/components/search/reducers';
 import {
     LIST_KEY_UP,
     LIST_KEY_DOWN,
@@ -14,20 +14,21 @@ import {
 
 describe("Requests reducers de requests", () => {
     const term = 'mús';
+    const initialState = {
+      openAutocomplete: false,
+      term: '',
+      indexActiveItem: -1,
+      loading: false,
+      completeTerm: null,
+      goTo: null,
+    };
 
     it("Deve retornar o estado inicial", () => {
-        const initialState = {
-          openAutocomplete: false,
-          term: '',
-          indexItemActive: -1,
-          loading: false
-        };
-
         expect(reducer(undefined, {})).toEqual(initialState);
     });
 
-    it("Manipula REQUEST_INIT", () => {
-        expect(reducer(undefined, {
+    it("Reducer REQUEST_INIT: Espera state correto para início da requisição", () => {
+        expect(reducer(state, {
             type: REQUEST_INIT,
             term
         })).toEqual({
@@ -37,7 +38,7 @@ describe("Requests reducers de requests", () => {
         });
     });
 
-    it("Manipula REQUEST_SUCCESS", () => {
+    it("Reducer REQUEST_SUCCESS: Espera que retorno tenha o state correto com o termo nas suggestions envolvidas pela tag mark", () => {
         const data = {
             hightlights: [
                 {
@@ -61,44 +62,49 @@ describe("Requests reducers de requests", () => {
             ]
         };
 
-        const expectedData = [
-            {
-                hightlights: [
-                    {
-                         "title":"Pop & Art",
-                         "url":"http://g1.globo.com/pop-arte/index.html",
-                         "logo":"http://s.glbimg.com/bu/i/fc/5fb2e18d-a47f-4bb8-9a7e-b66871cf53c0.png",
-                         "queries":[
-                            "música",
-                            "pop",
-                            "art",
-                            "arte",
-                            "cultura",
-                            "shows"
-                         ]
-                    }
-                ],
-                suggestions: [
-                    "<mark>mus</mark>ica",
-                    "<mark>mus</mark>ica de anderson freire",
-                    "<mark>mus</mark>ica que neymar pediu"
-                ]
-            }
-        ];
+        const expectedData = {
+            hightlights: [
+                {
+                     "title":"Pop & Art",
+                     "url":"http://g1.globo.com/pop-arte/index.html",
+                     "logo":"http://s.glbimg.com/bu/i/fc/5fb2e18d-a47f-4bb8-9a7e-b66871cf53c0.png",
+                     "queries":[
+                        "música",
+                        "pop",
+                        "art",
+                        "arte",
+                        "cultura",
+                        "shows"
+                     ]
+                }
+            ],
+            suggestions: [
+                "<mark>mus</mark>ica",
+                "<mark>mus</mark>ica de anderson freire",
+                "<mark>mus</mark>ica que neymar pediu"
+            ]
+        };
 
-        expect(reducer({
+        const previosState = Object.assign({}, initialState, {
+            term: 'mús'
+        });
+
+        expect(reducer(previosState, {
             type: REQUEST_SUCCESS,
             term,
-            data
+            data: { data }
         })).toEqual({
+            openAutocomplete: false,
+            term,
+            indexActiveItem: -1,
             loading: false,
-            term: 'mús',
-            openAutocomplete: true,
-            data: expectedData
+            completeTerm: null,
+            goTo: null,
+            data: {data: expectedData },
         });
     });
 
-    it("Manipula REQUEST_FAILURE", () => {
+    it("Reducer REQUEST_FAILURE", () => {
         expect(reducer({
             type: REQUEST_FAILURE,
             term,
