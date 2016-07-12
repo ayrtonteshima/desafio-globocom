@@ -7,30 +7,30 @@ import Routes from './app/routes/routes';
 const server = new Hapi.Server();
 
 const plugins = [
-    Vision,
-    Inert,
+  Vision,
+  Inert,
 ];
 
 server.connection(serverConfig);
 
 export default function start(done) {
-    server.register(plugins, (err) => {
-        if (err) {
-            return done(err);
-        }
+  server.register(plugins, (err) => {
+    if (err) {
+      return done(err);
+    }
 
-        server.route(Routes);
+    server.route(Routes);
 
-        return server.start(serverErr => {
-            if (serverErr) {
-                return done(serverErr);
-            }
+    return server.start(serverErr => {
+      if (serverErr) {
+        return done(serverErr);
+      }
 
-            console.log('Servidor rodando em: ', server.info.uri);
+      console.log('Servidor rodando em: ', server.info.uri);
 
-            return done();
-        });
+      return done();
     });
+  });
 
-    return server;
+  return server;
 }

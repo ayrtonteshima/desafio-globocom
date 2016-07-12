@@ -5,14 +5,14 @@
  * @returns {String} Termo normalizado
  */
 export const accentsTidy = (s) => {
-    let r = s.toLowerCase();
-    r = r.replace(new RegExp(/[àáâãäå]/g), 'a');
-    r = r.replace(new RegExp(/ç/g), 'c');
-    r = r.replace(new RegExp(/[èéêë]/g), 'e');
-    r = r.replace(new RegExp(/[ìíîï]/g), 'i');
-    r = r.replace(new RegExp(/[òóôõö]/g), 'o');
-    r = r.replace(new RegExp(/[ùúûü]/g), 'u');
-    return r;
+  let r = s.toLowerCase();
+  r = r.replace(new RegExp(/[àáâãäå]/g), 'a');
+  r = r.replace(new RegExp(/ç/g), 'c');
+  r = r.replace(new RegExp(/[èéêë]/g), 'e');
+  r = r.replace(new RegExp(/[ìíîï]/g), 'i');
+  r = r.replace(new RegExp(/[òóôõö]/g), 'o');
+  r = r.replace(new RegExp(/[ùúûü]/g), 'u');
+  return r;
 };
 
 /**
@@ -22,7 +22,7 @@ export const accentsTidy = (s) => {
  * conter na na string base
  */
 const regExpTextCompare = (haystack = '', needle = '') => (
-    new RegExp(`${accentsTidy(needle)}`, 'ig').test(accentsTidy(haystack))
+  new RegExp(`${accentsTidy(needle)}`, 'ig').test(accentsTidy(haystack))
 );
 
 /**
@@ -31,14 +31,14 @@ const regExpTextCompare = (haystack = '', needle = '') => (
  * @return {Boolean} Retorna true se encontrar, false se não.
  */
 const searchTermArray = (arr = [], needle = '') => {
-    const total = arr.length;
-    let found = false;
-    let count = 0;
-    while (!found) {
-        if (count >= total) break;
-        found = regExpTextCompare(arr[count++], needle);
-    }
-    return found;
+  const total = arr.length;
+  let found = false;
+  let count = 0;
+  while (!found) {
+    if (count >= total) break;
+    found = regExpTextCompare(arr[count++], needle);
+  }
+  return found;
 };
 
 /**
@@ -47,11 +47,11 @@ const searchTermArray = (arr = [], needle = '') => {
  * @return {Array} Retorna com items filtrados pelas queries com o termo buscado
  */
 export const filterHightlights = ({ term }, { hightlights }) => {
-    /**
-     * Se não for passado termo, retorna todos os hightlights
-     */
-    if (!term) return hightlights;
-    return hightlights.filter(({ queries }) => searchTermArray(queries, term));
+  /**
+   * Se não for passado termo, retorna todos os hightlights
+   */
+  if (!term) return hightlights;
+  return hightlights.filter(({ queries }) => searchTermArray(queries, term));
 };
 
 /**
@@ -60,9 +60,9 @@ export const filterHightlights = ({ term }, { hightlights }) => {
  * @return {Array} Retorna array filtrado que contenha o termo buscado
  */
 export const filterSuggestions = ({ term }, { suggestions }) => {
-    /**
-     * Se não for passado termo, retorna todas as sugestões
-     */
-    if (!term) return suggestions;
-    return suggestions.filter((haystack) => regExpTextCompare(haystack, term));
+  /**
+   * Se não for passado termo, retorna todas as sugestões
+   */
+  if (!term) return suggestions;
+  return suggestions.filter((haystack) => regExpTextCompare(haystack, term));
 };

@@ -1,7 +1,7 @@
 import * as searchModel from './../models/search';
 import {
-    filterHightlights,
-    filterSuggestions,
+  filterHightlights,
+  filterSuggestions,
 } from './../utils';
 
 /**
@@ -9,13 +9,13 @@ import {
  * @return {Promise} Retorna promisse com os dados filtrados
  */
 export function filter(request) {
-    return searchModel.get().then(data => {
-        const hightlights = filterHightlights(request.params, data);
-        const suggestions = filterSuggestions(request.params, data);
+  return searchModel.get().then(data => {
+    const hightlights = filterHightlights(request.params, data);
+    const suggestions = filterSuggestions(request.params, data);
 
-        return Promise.resolve({
-            hightlights,
-            suggestions,
-        }, data);
-    }).catch(err => Promise.reject(err));
+    return Promise.resolve({
+      hightlights,
+      suggestions,
+    }, data);
+  }).catch(err => Promise.reject(err));
 }

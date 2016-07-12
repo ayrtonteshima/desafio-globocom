@@ -3,9 +3,9 @@ import SearchRoute from './search';
 import StaticRoute from './statics';
 
 const routes = [
-    PagesRoute,
-    SearchRoute,
-    StaticRoute,
+  PagesRoute,
+  SearchRoute,
+  StaticRoute,
 ];
 
 export default routes;
