@@ -37,7 +37,7 @@ const actionKeyRight = (term) => ({
 function fetch(term) {
   return (dispatch) => {
     dispatch(requestInit(term));
-    return get(`http://localhost:9000/search/${term}`)
+    return get(`http://localhost:9999/search/${term}`)
     .then(response => {
       dispatch(requestSuccess(term, response.data));
     });

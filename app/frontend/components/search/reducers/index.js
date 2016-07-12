@@ -12,14 +12,6 @@ import {
   REQUEST_FAILURE,
 } from './../constants/ActionsTypes';
 import { SEARCH_BASE } from './../configs/urls';
-import { accentsTidy } from './../../../../utils';
-
-function addMarkTag(text, input) {
-  if (text === '') {
-    return text;
-  }
-  return text.replace(RegExp(input.trim(), 'gi'), '<mark>$&</mark>');
-}
 
 function handlePrevIndex({ indexActiveItem }) {
   let index = indexActiveItem;
@@ -42,7 +34,7 @@ function handleNextIndex({ indexActiveItem, data }) {
   return index;
 }
 
-function handleData({ term, data }) {
+function handleData({ data }) {
   if (!data.data) return {};
   const { suggestions, hightlights } = data.data;
 
@@ -50,12 +42,10 @@ function handleData({ term, data }) {
   suggestions.sort((a, b) => a.length - b.length);
   hightlights.sort((a, b) => a.title.length - b.title.length);
 
-  const suggestionsMarked = suggestions.map((sg) => addMarkTag(accentsTidy(sg), accentsTidy(term)));
   return Object.assign({}, data, {
     data: {
       hightlights,
       suggestions,
-      suggestionsMarked,
     },
   });
 }

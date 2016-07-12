@@ -3,6 +3,7 @@ import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import actions from './actions';
 import searchReducer from './reducers';
+import { accentsTidy } from './../../../utils';
 
 class Search {
   constructor() {
@@ -91,6 +92,14 @@ class Search {
     }
   }
 
+  addMarkTag(text, input) {
+    if (text === '') {
+      return text;
+    }
+    const regExp = RegExp(accentsTidy(input.trim()), 'gi');
+    return accentsTidy(text).replace(regExp, '<mark>$&</mark>');
+  }
+
   renderHightlight({ title, logo }, index) {
     const classesLi = [
       'autocomplete__item',
@@ -100,7 +109,7 @@ class Search {
     ];
     return `<li
               data-type="hightlight"
-              class="${classesLi.join(' ')}">
+              class="${classesLi.join()}">
               <img src="${logo}" />
               <span>${title}</span>
             </li>`;
@@ -110,25 +119,27 @@ class Search {
     return hightlights.map((h, index) => this.renderHightlight(h, index)).join('');
   }
 
-  renderSuggestion(suggestionMarked, suggestion, index) {
+  renderSuggestion(suggestion, index) {
     const classesLi = [
       'autocomplete__item',
       'autocomplete__item-selectable',
       this.getClassItemSelected(index),
     ];
+    const term = this.store.getState().term;
+    const suggestionMarked = this.addMarkTag(suggestion, term);
     return `<li
               data-type="suggestion"
               data-title="${suggestion}"
-              class="${classesLi.join(' ')}">
+              class="${classesLi.join()}">
                 ${suggestionMarked}
             </li>`;
   }
 
-  renderSuggestions({ suggestions, suggestionsMarked, hightlights }) {
+  renderSuggestions({ suggestions, hightlights }) {
     const totalHightlights = hightlights.length;
-    const suggestionsHtml = suggestionsMarked.map((s, index) => (
-      this.renderSuggestion(s, suggestions[index], index + totalHightlights)).join('')
-    );
+    const suggestionsHtml = suggestions.map((s, index) => (
+      this.renderSuggestion(s, index + totalHightlights))
+    ).join('');
 
     return `<li class="autocomplete__item autocomplete__suggestions">
               <ul>
@@ -146,7 +157,7 @@ class Search {
     ];
     return `<li
               data-type="globo"
-              class="${classesLi.join(' ')}"
+              class="${classesLi.join()}"
               >
               Busca '${term}' na Globo.com
             </li>`;
@@ -160,7 +171,7 @@ class Search {
     ];
     return `<li
               data-type="web"
-              class="${classesLi.join(' ')}">
+              class="${classesLi.join()}">
                 Busca '${term}' na Web
             </li>`;
   }
@@ -191,7 +202,6 @@ class Search {
     ${suggestionGlobo}
     ${suggestionWeb}
     `;
-
 
     this.dom.autocomplete__list.innerHTML = html;
     this.setValueInputKeyUpAndDown(term);
