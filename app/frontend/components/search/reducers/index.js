@@ -65,21 +65,23 @@ function reducerKeyEnter(state, action) {
 
   let goTo = '';
 
+  const sufixLink = `/?q=${encodeURI(term)}`;
+
   switch (itemType) {
     case 'hightlights':
       goTo = hightlights[indexActiveItem].url;
       break;
     case 'suggestion':
-      goTo = `${URL_SEARCH_SUGGESTIONS}/?q=${encodeURI(term)}`;
+      goTo = `${URL_SEARCH_SUGGESTIONS}${sufixLink}`;
       break;
     case 'globo':
-      goTo = `${SEARCH_GLOBO}/?q=${encodeURI(term)}`;
+      goTo = `${SEARCH_GLOBO}${sufixLink}`;
       break;
     case 'web':
-      goTo = `${SEARCH_WEB}/?q=${encodeURI(term)}`;
+      goTo = `${SEARCH_WEB}${sufixLink}`;
       break;
     default:
-      goTo = `${SEARCH_GLOBO}/?q=${encodeURI(term)}`;
+      goTo = `${SEARCH_GLOBO}${sufixLink}`;
       break;
   }
 
