@@ -35,9 +35,7 @@ class Search {
     handlerInputKeyUp(event) {
         event.preventDefault();
         const { value } = event.target;
-        // if (value.length > 1) {
         this.store.dispatch(actions(event.which, [value]));
-        // }
     }
 
     handlerFormSubmit(event) {
@@ -56,7 +54,7 @@ class Search {
     bindEvents() {
         this.dom.input.addEventListener('keyup', this.handlerInputKeyUp);
         this.dom.input.addEventListener("focus", this.handlerFocusInput);
-        // this.dom.input.addEventListener("blur", this.handlerBlurInput);
+        this.dom.input.addEventListener("blur", this.handlerBlurInput);
         this.dom.form.addEventListener('submit', this.handlerFormSubmit);
     }
 
@@ -73,41 +71,86 @@ class Search {
             .toggle('autocomplete--opened', open);
     }
 
-    renderHightlight({title, logo}) {
-        return `<li class="autocomplete__item autocomplete__item-selectable autocomplete__item--hightlights">
+    getClassItemSelected(index) {
+        return index === this.store.getState().indexActiveItem ?
+                'autocomplete__item--selected' :
+                '';
+    }
+
+    setValueInputKeyUpAndDown(term) {
+        const selected = document.querySelector('.autocomplete__item--selected');
+        if (selected && selected.getAttribute('data-title')) {
+            this.dom.input.value = document.querySelector('.autocomplete__item--selected').getAttribute('data-title');
+        } else {
+            this.dom.input.value = term;
+        }
+    }
+
+    renderHightlight({title, logo}, index) {
+        return `<li class="autocomplete__item ${this.getClassItemSelected(index)} autocomplete__item-selectable autocomplete__item--hightlights">
                     <img src="${logo}" />
                     <span>${title}</span>
                 </li>`;
     }
 
-    renderSuggestion(suggestion) {
-        return `<li class="autocomplete__item autocomplete__item-selectable">${suggestion}</li>`;
+    renderHightlights({hightlights}) {
+        return hightlights.map((h, index) => this.renderHightlight(h, index)).join('');
     }
 
-    renderAutocomplete () {
+    renderSuggestion(suggestionMarked, suggestion, index) {
+        return `<li data-title="${suggestion}" class="autocomplete__item ${this.getClassItemSelected(index)} autocomplete__item-selectable">${suggestionMarked}</li>`;
+    }
 
+    renderSuggestions({suggestions, suggestionsMarked, hightlights}) {
+        const totalHightlights = hightlights.length;
+        const suggestionsHtml = suggestionsMarked.map((s, index) => this.renderSuggestion(s, suggestions[index], index+totalHightlights)).join('');
+
+        return `<li class="autocomplete__item autocomplete__suggestions">
+                    <ul>
+                        <li class="autocomplete__item autocomplete__item--info">Sugestões de busca</li>
+                        ${suggestionsHtml}
+                    </ul>
+                </li>`;
+    }
+
+    renderSuggestionGlobo(term, index) {
+        return `<li class="autocomplete__item autocomplete__item-selectable ${this.getClassItemSelected(index)}">Busca '${term}' na Globo.com</li>`;
+    }
+
+    renderSuggestionWeb(term, index) {
+        return `<li class="autocomplete__item autocomplete__item-selectable ${this.getClassItemSelected(index)}">Busca '${term}' na Web</li>`;
     }
 
     render() {
         if (!this.store.getState().openAutocomplete) return null;
-        const data = this.store.getState().data.data;
-        const term = this.store.getState().term;
-        const hightlights = data.hightlights.map(h => this.renderHightlight(h)).join('');
-        const suggestions = data.suggestionsMarked.map(s => this.renderSuggestion(s)).join('');
+
+        if (this.store.getState().goTo) {
+            window.location.href = this.store.getState().goTo;
+        }
+
+        const state = this.store.getState();
+        const { term, data: { data } } = state;
+        const totalHightlights = data.hightlights.length;
+        const totalSuggestions = data.suggestions.length;
+
+        const indexSuggestionGlobo = totalHightlights + totalSuggestions;
+        const indexSuggestionWeb = indexSuggestionGlobo + 1;
+
+        const hightlights = this.renderHightlights(data);
+        const suggestions = this.renderSuggestions(data);
+        const suggestionGlobo = this.renderSuggestionGlobo(term, indexSuggestionGlobo);
+        const suggestionWeb = this.renderSuggestionGlobo(term, indexSuggestionWeb);
+
         const html = `
                 ${hightlights}
-                <li class="autocomplete__item autocomplete__suggestions">
-                    <ul>
-                        <li class="autocomplete__item autocomplete__item--info">Sugestões de busca</li>
-                        ${suggestions}
-                    </ul>
-                </li>
-                <li class="autocomplete__item autocomplete__item-selectable">Busca '${term}' na Globo.com</li>
-                <li class="autocomplete__item autocomplete__item-selectable">Busca '${term}' na Web</li>
+                ${suggestions}
+                ${suggestionGlobo}
+                ${suggestionWeb}
                 `;
 
 
         this.dom.autocomplete__list.innerHTML = html;
+        this.setValueInputKeyUpAndDown(term);
     }
 }
 

@@ -21,7 +21,7 @@ const mockStore = configureMockStore(middlewares);
 describe("Testando action creators de interactions do teclado", () => {
     const KEY_ENTER     = 13;
     const KEY_ESC       = 27;
-    const KEY_LEFT      = 36;
+    const KEY_LEFT      = 37;
     const KEY_UP        = 38;
     const KEY_RIGHT     = 39;
     const KEY_DOWN      = 40;
@@ -49,7 +49,7 @@ describe("Testando action creators de interactions do teclado", () => {
             type: LIST_KEY_UP
         };
 
-        expect(actions(KEY_UP)).toEqual(LIST_KEY_UP);
+        expect(actions(KEY_UP)).toEqual(expectedAction);
     });
 
     it("Testa quando pressiona para baixo dentro do autocomplete aberto", () => {
@@ -57,23 +57,24 @@ describe("Testando action creators de interactions do teclado", () => {
             type: LIST_KEY_DOWN
         };
 
-        expect(actions(KEY_DOWN)).toEqual(LIST_KEY_DOWN);
+        expect(actions(KEY_DOWN)).toEqual(expectedAction);
     });
 
     it("Testa quando pressiona para esquerda dentro do autocomplete aberto", () => {
         const expectedAction = {
-            type: LIST_KEY_LEFT
+            type: LIST_KEY_LEFT,
+            term: 'mús'
         };
 
-        expect(actions(KEY_LEFT)).toEqual(LIST_KEY_LEFT);
+        expect(actions(KEY_LEFT, ['mús'])).toEqual(expectedAction);
     });
 
     it("Testa quando pressiona para direita dentro do autocomplete aberto", () => {
         const expectedAction = {
-            type: LIST_KEY_RIGHT
+            type: LIST_KEY_RIGHT,
+            term: 'mús'
         };
-
-        expect(actions(KEY_RIGHT)).toEqual(LIST_KEY_RIGHT);
+        expect(actions(KEY_RIGHT, ['mús'])).toEqual(expectedAction);
     });
 
 });

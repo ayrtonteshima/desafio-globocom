@@ -60,12 +60,18 @@
         &-selectable {
             padding: 5px 10px;
             border-left: 3px solid transparent;
-            &:hover {
+            &:hover, &.autocomplete__item--selected {
                 border-left: 3px solid $lightRed;
                 background-color: #f1f1f1;
                 color: $lightRed;
+                mark {
+                    color: $lightRed;
+                }
             }
         }
+
+
+
         &--hightlights {
             img {
                 display: inline-block;

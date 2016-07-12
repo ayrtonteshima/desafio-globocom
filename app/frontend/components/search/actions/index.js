@@ -24,6 +24,17 @@ const actionKeyOther = (term) => (dispatch, getState) => dispatch({
     data: getState().data || {}
 });
 
+const actionKeyLeft = (term) => ({
+    type: actionsTypes.LIST_KEY_LEFT,
+    term
+});
+
+const actionKeyRight = (term) => ({
+    type: actionsTypes.LIST_KEY_RIGHT,
+    term
+});
+
+
 function fetch(term) {
     return (dispatch) => {
         dispatch(requestInit(term));
@@ -42,10 +53,26 @@ function fetchIfNeeded(term) {
     return actionKeyOther(term);
 }
 
-function search(key, data = array) {
+function search(key, data = []) {
     switch (key) {
         case 13:
             return actionKeyEnter(data[0]);
+        case 27:
+            return {
+                type: actionsTypes.LIST_KEY_ESC
+            };
+        case 37:
+            return actionKeyLeft(data[0]);
+        case 38:
+            return {
+                type: actionsTypes.LIST_KEY_UP
+            };
+        case 39:
+            return actionKeyRight(data[0]);
+        case 40:
+            return {
+                type: actionsTypes.LIST_KEY_DOWN
+            };
         default:
             return fetchIfNeeded(data[0])
     }

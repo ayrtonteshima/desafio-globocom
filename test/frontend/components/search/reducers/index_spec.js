@@ -79,13 +79,13 @@ describe("Requests reducers de requests", () => {
             ],
             suggestions: [
                 "musica",
-                "musica de anderson freire",
-                "musica que neymar pediu"
+                "musica que neymar pediu",
+                "musica de anderson freire"
             ],
             suggestionsMarked: [
                 "<mark>mus</mark>ica",
-                "<mark>mus</mark>ica de anderson freire",
-                "<mark>mus</mark>ica que neymar pediu"
+                "<mark>mus</mark>ica que neymar pediu",
+                "<mark>mus</mark>ica de anderson freire"
             ]
         };
 
@@ -129,8 +129,59 @@ describe("Testando reducers de interactions", () => {
         term: 'mús',
         openAutocomplete: true,
         indexActiveItem: 2,
-        goto: null,
+        goTo: null,
         completeTerm: null
+    };
+
+    const data = {
+        hightlights: [
+            {
+                 title: "Pop & Art",
+                 url: "http://g1.globo.com/pop-arte/index.html",
+                 logo: "http://s.glbimg.com/bu/i/fc/5fb2e18d-a47f-4bb8-9a7e-b66871cf53c0.png",
+                 queries: [
+                    "música",
+                    "pop",
+                    "art",
+                    "arte",
+                    "cultura",
+                    "shows"
+                 ]
+            }
+        ],
+        suggestions: [
+            "musica",
+            "musica de anderson freire",
+            "musica que neymar pediu"
+        ]
+    };
+
+    const expectedData = {
+        hightlights: [
+            {
+                 "title":"Pop & Art",
+                 "url":"http://g1.globo.com/pop-arte/index.html",
+                 "logo":"http://s.glbimg.com/bu/i/fc/5fb2e18d-a47f-4bb8-9a7e-b66871cf53c0.png",
+                 "queries":[
+                    "música",
+                    "pop",
+                    "art",
+                    "arte",
+                    "cultura",
+                    "shows"
+                 ]
+            }
+        ],
+        suggestions: [
+            "musica",
+            "musica de anderson freire",
+            "musica que neymar pediu"
+        ],
+        suggestionsMarked: [
+            "<mark>mus</mark>ica",
+            "<mark>mus</mark>ica de anderson freire",
+            "<mark>mus</mark>ica que neymar pediu"
+        ]
     };
 
     it("Valida retorno quando LIST_MOUSE_OVER", () => {
@@ -147,14 +198,26 @@ describe("Testando reducers de interactions", () => {
     });
 
     it("Valida retorno quando LIST_KEY_DOWN", () => {
-        expect(reducer(initialState, {
-            type: LIST_KEY_DOWN
+        const dataMock = {
+            data: {
+                hightlights: [{}],
+                suggestions: ['', '', '']
+            }
+        };
+        const previousState = Object.assign({}, initialState, {
+            data: dataMock
+        });
+
+        expect(reducer(previousState, {
+            type: LIST_KEY_DOWN,
+            index: 2
         })).toEqual({
             term: 'mús',
             openAutocomplete: true,
             indexActiveItem: 3,
             goTo: null,
-            completeTerm: null
+            completeTerm: null,
+            data: dataMock
         })
     });
 
