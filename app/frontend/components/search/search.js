@@ -36,6 +36,7 @@ class Search {
     event.preventDefault();
     const { target: { value }, which } = event;
     const data = [value];
+    // Todo: refatorar
     if (which === 13) {
       const el = document.querySelector('.autocomplete__item--selected');
       const type = el.getAttribute('data-type');
