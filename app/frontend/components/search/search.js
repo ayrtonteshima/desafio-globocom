@@ -14,7 +14,6 @@ class Search {
         this.dom.autocomplete__list = document.getElementsByClassName('autocomplete__list')[0];
 
         this.handlerInputKeyUp = this.handlerInputKeyUp.bind(this);
-        this.handlerFormSubmit = this.handlerFormSubmit.bind(this);
         this.handlerFocusInput = this.handlerFocusInput.bind(this);
         this.handlerBlurInput = this.handlerBlurInput.bind(this);
         this.showAutocomplete = this.showAutocomplete.bind(this);
@@ -34,8 +33,13 @@ class Search {
 
     handlerInputKeyUp(event) {
         event.preventDefault();
-        const { value } = event.target;
-        this.store.dispatch(actions(event.which, [value]));
+        const { target: { value }, which } = event;
+        const data = [value];
+        if (which === 13) {
+            data.push(event.target.getAttribute('data-type'));
+        }
+        console.log(data);
+        this.store.dispatch(actions(which, data));
     }
 
     handlerFormSubmit(event) {
@@ -53,8 +57,8 @@ class Search {
 
     bindEvents() {
         this.dom.input.addEventListener('keyup', this.handlerInputKeyUp);
-        this.dom.input.addEventListener("focus", this.handlerFocusInput);
-        this.dom.input.addEventListener("blur", this.handlerBlurInput);
+        this.dom.input.addEventListener('focus', this.handlerFocusInput);
+        this.dom.input.addEventListener('blur', this.handlerBlurInput);
         this.dom.form.addEventListener('submit', this.handlerFormSubmit);
     }
 
@@ -87,7 +91,10 @@ class Search {
     }
 
     renderHightlight({title, logo}, index) {
-        return `<li class="autocomplete__item ${this.getClassItemSelected(index)} autocomplete__item-selectable autocomplete__item--hightlights">
+        return `<li
+                    data-type="hightlight"
+                    class="autocomplete__item ${this.getClassItemSelected(index)} autocomplete__item-selectable autocomplete__item--hightlights"
+                >
                     <img src="${logo}" />
                     <span>${title}</span>
                 </li>`;
@@ -98,7 +105,7 @@ class Search {
     }
 
     renderSuggestion(suggestionMarked, suggestion, index) {
-        return `<li data-title="${suggestion}" class="autocomplete__item ${this.getClassItemSelected(index)} autocomplete__item-selectable">${suggestionMarked}</li>`;
+        return `<li data-type="suggestion" data-title="${suggestion}" class="autocomplete__item ${this.getClassItemSelected(index)} autocomplete__item-selectable">${suggestionMarked}</li>`;
     }
 
     renderSuggestions({suggestions, suggestionsMarked, hightlights}) {
@@ -114,11 +121,16 @@ class Search {
     }
 
     renderSuggestionGlobo(term, index) {
-        return `<li class="autocomplete__item autocomplete__item-selectable ${this.getClassItemSelected(index)}">Busca '${term}' na Globo.com</li>`;
+        return `<li
+                    data-type="globo"
+                    class="autocomplete__item autocomplete__item-selectable ${this.getClassItemSelected(index)}"
+                >
+                        Busca '${term}' na Globo.com
+                </li>`;
     }
 
     renderSuggestionWeb(term, index) {
-        return `<li class="autocomplete__item autocomplete__item-selectable ${this.getClassItemSelected(index)}">Busca '${term}' na Web</li>`;
+        return `<li data-type="web" class="autocomplete__item autocomplete__item-selectable ${this.getClassItemSelected(index)}">Busca '${term}' na Web</li>`;
     }
 
     render() {

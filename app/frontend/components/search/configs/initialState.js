@@ -4,5 +4,5 @@ export default {
     indexActiveItem: -1,
     loading: false,
     goTo: null,
-    completeTerm: null
+    completeTerm: null,
 };

@@ -1,21 +1,21 @@
 import * as actionsTypes from './../constants/ActionsTypes';
 import initialState from './../configs/initialState';
-import { SEARCH_BASE } from './../configs/urls';
+import {
+    SEARCH_BASE,
+} from './../configs/urls';
 import {
     accentsTidy,
-    filterHightlights,
-    filterSuggestions,
 } from './../../../../utils';
 
 const addMarkTag = (text, input) => (
     text === '' ?
     text :
-    text.replace(RegExp(input.trim(), "gi"), "<mark>$&</mark>")
+    text.replace(RegExp(input.trim(), 'gi'), '<mark>$&</mark>')
 );
 
-const handlePrevIndex = ({ indexActiveItem, data }) => {
-    return --indexActiveItem < -1 ? -1 : indexActiveItem
-}
+const handlePrevIndex = ({ indexActiveItem }) => (
+    --indexActiveItem < -1 ? -1 : indexActiveItem
+)
 
 const handleNextIndex = ({ indexActiveItem, data }) => {
     if (!data) return -1;
@@ -47,6 +47,20 @@ const handleData = ({term, data}) => {
     });
 };
 
+const reducerKeyEnter = ({ indexActiveItem, data }, { term, type }) => {
+    if (term.length > 1) {
+        const { data: {suggestions, hightlights }} = data;
+        if (indexActiveItem < hightlights.length) {
+            return {
+                goTo: hightlights[indexActiveItem].url
+            };
+        }
+        return {
+            goTo: `${SEARCH_BASE}/?q=${encodeURI(term)}`
+        }
+    }
+}
+
 export default function(state, action) {
     if (state == undefined) {
         return initialState;
@@ -54,9 +68,7 @@ export default function(state, action) {
 
     switch(action.type) {
         case actionsTypes.LIST_KEY_ENTER:
-            return Object.assign({}, state, {
-                goTo: `${SEARCH_BASE}/?q=${encodeURI(action.term)}`
-            });
+            return Object.assign({}, state, reducerKeyEnter(state, action));
 
         case actionsTypes.LIST_KEY_OTHER:
             return Object.assign({}, state, {
