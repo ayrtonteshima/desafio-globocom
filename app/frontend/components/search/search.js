@@ -37,9 +37,10 @@ class Search {
     const { target: { value }, which } = event;
     const data = [value];
     if (which === 13) {
-      data.push(event.target.getAttribute('data-type'));
+      const el = document.querySelector('.autocomplete__item--selected');
+      const type = el.getAttribute('data-type');
+      data.push(type);
     }
-
     this.store.dispatch(actions(which, data));
   }
 
@@ -108,8 +109,8 @@ class Search {
       this.getClassItemSelected(index),
     ];
     return `<li
-              data-type="hightlight"
-              class="${classesLi.join()}">
+              data-type="hightlights"
+              class="${classesLi.join(' ')}">
               <img src="${logo}" />
               <span>${title}</span>
             </li>`;
@@ -130,7 +131,7 @@ class Search {
     return `<li
               data-type="suggestion"
               data-title="${suggestion}"
-              class="${classesLi.join()}">
+              class="${classesLi.join(' ')}">
                 ${suggestionMarked}
             </li>`;
   }
@@ -157,7 +158,7 @@ class Search {
     ];
     return `<li
               data-type="globo"
-              class="${classesLi.join()}"
+              class="${classesLi.join(' ')}"
               >
               Busca '${term}' na Globo.com
             </li>`;
@@ -171,7 +172,7 @@ class Search {
     ];
     return `<li
               data-type="web"
-              class="${classesLi.join()}">
+              class="${classesLi.join(' ')}">
                 Busca '${term}' na Web
             </li>`;
   }
@@ -194,7 +195,7 @@ class Search {
     const hightlights = this.renderHightlights(data);
     const suggestions = this.renderSuggestions(data);
     const suggestionGlobo = this.renderSuggestionGlobo(term, indexSuggestionGlobo);
-    const suggestionWeb = this.renderSuggestionGlobo(term, indexSuggestionWeb);
+    const suggestionWeb = this.renderSuggestionWeb(term, indexSuggestionWeb);
 
     const html = `
     ${hightlights}

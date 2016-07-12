@@ -12,9 +12,10 @@ const requestSuccess = (term, data) => ({
   data,
 });
 
-const actionKeyEnter = ([term]) => ({
+const actionKeyEnter = ([term, itemType]) => ({
   type: actionsTypes.LIST_KEY_ENTER,
   term,
+  itemType,
 });
 
 const actionKeyOther = (term) => (dispatch, getState) => dispatch({

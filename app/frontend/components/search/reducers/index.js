@@ -11,9 +11,20 @@ import {
   REQUEST_SUCCESS,
   REQUEST_FAILURE,
 } from './../constants/ActionsTypes';
-import { SEARCH_BASE } from './../configs/urls';
+import {
+  URL_SEARCH_SUGGESTIONS,
+  SEARCH_GLOBO,
+  SEARCH_WEB,
+} from './../configs/urls';
 
-function handlePrevIndex({ indexActiveItem }) {
+function getTotalResults({ data }) {
+  const { hightlights, suggestions } = data;
+  const TOTAL_EXTRA_ITENS = 2;
+  return hightlights.length + suggestions.length + TOTAL_EXTRA_ITENS;
+}
+
+function handlePrevIndex({ indexActiveItem, data }) {
+  if (!data) return -1;
   let index = indexActiveItem;
   if (--index < -1) {
     return -1;
@@ -21,16 +32,12 @@ function handlePrevIndex({ indexActiveItem }) {
   return index;
 }
 
-function handleNextIndex({ indexActiveItem, data }) {
-  // Todo: Refatorar
+function handleNextIndex({ totalResults, indexActiveItem, data }) {
   if (!data) return -1;
-  const { data: { hightlights, suggestions } } = data;
-  const total = hightlights.length + suggestions.length + 2;
   let index = indexActiveItem;
-  if (++index >= total) {
+  if (++index >= totalResults) {
     index = index - 1;
   }
-
   return index;
 }
 
@@ -53,20 +60,32 @@ function handleData({ data }) {
 function reducerKeyEnter(state, action) {
   // Todo: Refatorar
   const { indexActiveItem, data } = state;
-  const { term } = action;
-  if (term.length > 1) {
-    const { data: { hightlights } } = data;
-    if (indexActiveItem < hightlights.length) {
-      return {
-        goTo: hightlights[indexActiveItem].url,
-      };
-    }
-    return {
-      goTo: `${SEARCH_BASE}/?q=${encodeURI(term)}`,
-    };
+  const { data: { hightlights } } = data;
+  const { term, itemType } = action;
+
+  let goTo = '';
+
+  switch (itemType) {
+    case 'hightlights':
+      goTo = hightlights[indexActiveItem].url;
+      break;
+    case 'suggestion':
+      goTo = `${URL_SEARCH_SUGGESTIONS}/?q=${encodeURI(term)}`;
+      break;
+    case 'globo':
+      goTo = `${SEARCH_GLOBO}/?q=${encodeURI(term)}`;
+      break;
+    case 'web':
+      goTo = `${SEARCH_WEB}/?q=${encodeURI(term)}`;
+      break;
+    default:
+      goTo = `${SEARCH_GLOBO}/?q=${encodeURI(term)}`;
+      break;
   }
 
-  return state;
+  return {
+    goTo,
+  };
 }
 
 function requests(state, action) {
@@ -83,6 +102,7 @@ function requests(state, action) {
         data: handleData(action),
         openAutocomplete: action.term.length > 1,
         indexActiveItem: -1,
+        totalResults: getTotalResults(action.data),
       };
 
     default:
