@@ -4,7 +4,6 @@ import nock from 'nock';
 import {
   handleKeyboard,
   handleMouse,
-  handleRequests,
 } from './../../../../../app/frontend/components/search/actions';
 import {
   LIST_KEY_UP,
@@ -37,7 +36,7 @@ describe("Testando action creators de interactions do teclado", () => {
       itemType: 'suggestions'
     };
 
-    expect(actions(KEY_ENTER, ['musica de anderson freire', 'suggestions'])).toEqual(expectedAction);
+    expect(handleKeyboard(KEY_ENTER, ['musica de anderson freire', 'suggestions'])).toEqual(expectedAction);
   });
 
 
@@ -46,7 +45,7 @@ describe("Testando action creators de interactions do teclado", () => {
       type: LIST_KEY_ESC
     };
 
-    expect(actions(KEY_ESC)).toEqual(expectedAction);
+    expect(handleKeyboard(KEY_ESC)).toEqual(expectedAction);
   });
 
   it("Testa quando pressiona para cima dentro do autocomplete aberto", () => {
@@ -54,7 +53,7 @@ describe("Testando action creators de interactions do teclado", () => {
       type: LIST_KEY_UP
     };
 
-    expect(actions(KEY_UP)).toEqual(expectedAction);
+    expect(handleKeyboard(KEY_UP)).toEqual(expectedAction);
   });
 
   it("Testa quando pressiona para baixo dentro do autocomplete aberto", () => {
@@ -62,7 +61,7 @@ describe("Testando action creators de interactions do teclado", () => {
       type: LIST_KEY_DOWN
     };
 
-    expect(actions(KEY_DOWN)).toEqual(expectedAction);
+    expect(handleKeyboard(KEY_DOWN)).toEqual(expectedAction);
   });
 
   it("Testa quando pressiona para esquerda dentro do autocomplete aberto", () => {
@@ -71,7 +70,7 @@ describe("Testando action creators de interactions do teclado", () => {
       term: 'mús'
     };
 
-    expect(actions(KEY_LEFT, ['mús'])).toEqual(expectedAction);
+    expect(handleKeyboard(KEY_LEFT, ['mús'])).toEqual(expectedAction);
   });
 
   it("Testa quando pressiona para direita dentro do autocomplete aberto", () => {
@@ -79,7 +78,7 @@ describe("Testando action creators de interactions do teclado", () => {
       type: LIST_KEY_RIGHT,
       term: 'mús'
     };
-    expect(actions(KEY_RIGHT, ['mús'])).toEqual(expectedAction);
+    expect(handleKeyboard(KEY_RIGHT, ['mús'])).toEqual(expectedAction);
   });
 
 });
