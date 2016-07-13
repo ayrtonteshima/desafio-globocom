@@ -17,12 +17,23 @@ import {
   SEARCH_WEB,
 } from './../configs/urls';
 
+/**
+ * Calcula total de resultados toda vez que é filtrado
+ * @param  {Object} options.data Objeto que retorna o array de hightlights e suggestions
+ * @return {Number} Retorna total
+ */
 function getTotalResults({ data }) {
   const { hightlights, suggestions } = data;
   const TOTAL_EXTRA_ITENS = 2;
   return hightlights.length + suggestions.length + TOTAL_EXTRA_ITENS;
 }
 
+/**
+ * Retorna posição anterior do item selecionado no autocomplete
+ * @param  {Number} options.indexActiveItem Posição atual
+ * @param  {Object} options.data            Objeto com os dados, usado para verificar se tem algum resultado
+ * @return {Number}                         Retorna posição anterior
+ */
 function handlePrevIndex({ indexActiveItem, data }) {
   if (!data) return -1;
   let index = indexActiveItem;
@@ -32,6 +43,13 @@ function handlePrevIndex({ indexActiveItem, data }) {
   return index;
 }
 
+/**
+ * Retorna próxima posição do item selecionado no autocomplete
+ * @param  {Number} options.totalResults    Total de resultados depois de filtrados
+ * @param  {Number} options.indexActiveItem Posição atual
+ * @param  {Object} options.data            Objeto com os dados, usado para verificar se tem algum resultado
+ * @return {Number}                         Retorna próxima posição
+ */
 function handleNextIndex({ totalResults, indexActiveItem, data }) {
   if (!data) return -1;
   let index = indexActiveItem;
@@ -41,6 +59,12 @@ function handleNextIndex({ totalResults, indexActiveItem, data }) {
   return index;
 }
 
+
+/**
+ * Ordena resultado
+ * @param  {Object} options.data Objeto com hightlights e suggestions
+ * @return {Object}              Retorna resultado ordenado
+ */
 function handleData({ data }) {
   if (!data.data) return {};
   const { suggestions, hightlights } = data.data;
@@ -57,8 +81,13 @@ function handleData({ data }) {
   });
 }
 
+/**
+ * Reducer para quando usuário clicar em Enter no teclado
+ * @param  {Object} state  Estado atual da store
+ * @param  {Action} action Ação passada para reducer processar
+ * @return {Object}        Link para qual a página será redirecionada
+ */
 function reducerKeyEnter(state, action) {
-  // Todo: Refatorar
   const { indexActiveItem, data } = state;
   const { data: { hightlights } } = data;
   const { term, itemType } = action;
@@ -90,6 +119,12 @@ function reducerKeyEnter(state, action) {
   };
 }
 
+/**
+ * Reducer para requisições ajax
+ * @param  {Object} state  Estado atual da store
+ * @param  {Object} action Ação com payload passada para reducer processar
+ * @return {Object}        Objeto com os dados processados
+ */
 function requests(state, action) {
   switch (action.type) {
     case REQUEST_INIT:
@@ -112,6 +147,12 @@ function requests(state, action) {
   }
 }
 
+/**
+ * Reducer para interações com o teclado
+ * @param  {Object} state  Estado atual da store
+ * @param  {Action} action Ação com payload passada para reducer processar
+ * @return {Object}        Objeto com os dados processados
+ */
 function keyPress(state, action) {
   switch (action.type) {
     case LIST_KEY_ENTER:
@@ -151,6 +192,12 @@ function keyPress(state, action) {
   }
 }
 
+/**
+ * Reducer principal para todo o componente de livesearch
+ * @param  {Object} state  Estado atual da store
+ * @param  {Object} action Ação com payload passada reducer processar
+ * @return {Object}        Objeto com novo estado da store
+ */
 export default function (state, action) {
   if (state === undefined) {
     return initialState;
