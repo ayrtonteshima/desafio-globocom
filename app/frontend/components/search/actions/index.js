@@ -54,7 +54,7 @@ function fetchIfNeeded(term) {
   return actionKeyOther(term);
 }
 
-function search(key, data = []) {
+export function handleKeyboard(key, data = []) {
   switch (key) {
     case 13:
       return actionKeyEnter(data);
@@ -79,4 +79,9 @@ function search(key, data = []) {
   }
 }
 
-export default search;
+export function handleMouse(index) {
+  return {
+    type: actionsTypes.LIST_MOUSE_OVER,
+    indexActiveItem: index,
+  };
+}

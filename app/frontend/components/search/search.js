@@ -1,7 +1,10 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
-import actions from './actions';
+import {
+  handleKeyboard,
+  handleMouse,
+} from './actions';
 import searchReducer from './reducers';
 import { accentsTidy } from './../../../utils';
 
@@ -18,6 +21,7 @@ class Search {
     this.handleFocusInput = this.handleFocusInput.bind(this);
     this.handleBlurInput = this.handleBlurInput.bind(this);
     this.showAutocomplete = this.showAutocomplete.bind(this);
+    this.handleMouseOverAutocomplete = this.handleMouseOverAutocomplete.bind(this);
     this.subscribe = this.subscribe.bind(this);
     this.render = this.render.bind(this);
 
@@ -44,7 +48,7 @@ class Search {
         data.push(type);
       }
     }
-    this.store.dispatch(actions(which, data));
+    this.store.dispatch(handleKeyboard(which, data));
   }
 
   handleFormSubmit(event) {
@@ -61,6 +65,7 @@ class Search {
   }
 
   handleMouseOverAutocomplete({ target }) {
+    // Todo: refatorar, problema com hover nos filhos
     if (target.nodeType !== 1 ||
         !target.classList.contains('autocomplete__item-selectable')) {
       return false;
@@ -74,6 +79,8 @@ class Search {
       el = el.parentNode;
     }
 
+    const index = el.getAttribute('data-index');
+    this.store.dispatch(handleMouse(index));
     return void 0;
   }
 

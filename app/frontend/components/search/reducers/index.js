@@ -3,8 +3,9 @@ import {
   LIST_KEY_ENTER, LIST_KEY_OTHER,
   LIST_KEY_LEFT, LIST_KEY_UP,
   LIST_KEY_RIGHT, LIST_KEY_DOWN,
-  LIST_KEY_ESC, REQUEST_INIT,
+  LIST_KEY_ESC, LIST_MOUSE_OVER,
   REQUEST_SUCCESS, REQUEST_FAILURE,
+  REQUEST_INIT,
 } from './../constants/ActionsTypes';
 import {
   URL_SEARCH_SUGGESTIONS, SEARCH_GLOBO,
@@ -216,6 +217,11 @@ export default function (state, action) {
     case REQUEST_SUCCESS:
     case REQUEST_FAILURE:
       return Object.assign({}, state, requests(state, action));
+
+    case LIST_MOUSE_OVER:
+      return Object.assign({}, state, {
+        indexActiveItem: action.indexActiveItem,
+      });
 
     default:
       return Object.assign({}, state, {

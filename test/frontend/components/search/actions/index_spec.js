@@ -153,7 +153,7 @@ describe("Testando async action de requests", () => {
       }
     ];
 
-    return store.dispatch(actions(119, ['mú']))
+    return store.dispatch(handleKeyboard(119, ['mú']))
         .then(() => {
           expect(store.getActions()).toEqual(expectedActions);
         });
