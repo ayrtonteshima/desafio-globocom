@@ -1,7 +1,11 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import nock from 'nock';
-import actions from './../../../../../app/frontend/components/search/actions';
+import {
+  handleKeyboard,
+  handleMouse,
+  handleRequests,
+} from './../../../../../app/frontend/components/search/actions';
 import {
   LIST_KEY_UP,
   LIST_KEY_DOWN,
