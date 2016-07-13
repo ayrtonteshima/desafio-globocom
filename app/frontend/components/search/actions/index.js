@@ -1,5 +1,6 @@
 import { get } from 'axios';
 import * as actionsTypes from './../constants/ActionsTypes';
+import serverConfigs from './../../../../configs/server';
 
 const requestInit = (term) => ({
   type: actionsTypes.REQUEST_INIT,
@@ -38,7 +39,7 @@ const actionKeyRight = (term) => ({
 function fetch(term) {
   return (dispatch) => {
     dispatch(requestInit(term));
-    return get(`http://localhost:9999/search/${term}`)
+    return get(`http://${serverConfigs.host}:${serverConfigs.port}/search/${term}`)
     .then(response => {
       dispatch(requestSuccess(term, response.data));
     });
