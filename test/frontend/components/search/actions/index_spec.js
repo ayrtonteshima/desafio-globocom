@@ -29,10 +29,11 @@ describe("Testando action creators de interactions do teclado", () => {
   it("Testa quando pressiona ENTER em um item da lista no autocomplete aberto", () => {
     const expectedAction = {
       type: LIST_KEY_ENTER,
-      term: 'musica de anderson freire'
+      term: 'musica de anderson freire',
+      itemType: 'suggestions'
     };
 
-    expect(actions(KEY_ENTER, ['musica de anderson freire', 1])).toEqual(expectedAction);
+    expect(actions(KEY_ENTER, ['musica de anderson freire', 'suggestions'])).toEqual(expectedAction);
   });
 
 

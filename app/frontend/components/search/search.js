@@ -39,8 +39,10 @@ class Search {
     // Todo: refatorar
     if (which === 13) {
       const el = document.querySelector('.autocomplete__item--selected');
-      const type = el.getAttribute('data-type');
-      data.push(type);
+      if (el) {
+        const type = el.getAttribute('data-type');
+        data.push(type);
+      }
     }
     this.store.dispatch(actions(which, data));
   }
@@ -130,7 +132,7 @@ class Search {
     const term = this.store.getState().term;
     const suggestionMarked = this.addMarkTag(suggestion, term);
     return `<li
-              data-type="suggestion"
+              data-type="suggestions"
               data-title="${suggestion}"
               class="${classesLi.join(' ')}">
                 ${suggestionMarked}
@@ -179,11 +181,10 @@ class Search {
   }
 
   render() {
-    if (!this.store.getState().openAutocomplete) return null;
-
     if (this.store.getState().goTo) {
       window.location.href = this.store.getState().goTo;
     }
+    if (!this.store.getState().openAutocomplete) return null;
 
     const state = this.store.getState();
     const { term, data: { data } } = state;

@@ -31,7 +31,8 @@ function getTotalResults({ data }) {
 /**
  * Retorna posição anterior do item selecionado no autocomplete
  * @param  {Number} options.indexActiveItem Posição atual
- * @param  {Object} options.data            Objeto com os dados, usado para verificar se tem algum resultado
+ * @param  {Object} options.data            Objeto com os dados,
+ *                                          usado para verificar se tem algum resultado
  * @return {Number}                         Retorna posição anterior
  */
 function handlePrevIndex({ indexActiveItem, data }) {
@@ -47,7 +48,8 @@ function handlePrevIndex({ indexActiveItem, data }) {
  * Retorna próxima posição do item selecionado no autocomplete
  * @param  {Number} options.totalResults    Total de resultados depois de filtrados
  * @param  {Number} options.indexActiveItem Posição atual
- * @param  {Object} options.data            Objeto com os dados, usado para verificar se tem algum resultado
+ * @param  {Object} options.data            Objeto com os dados, usado
+ *                                          para verificar se tem algum resultado
  * @return {Number}                         Retorna próxima posição
  */
 function handleNextIndex({ totalResults, indexActiveItem, data }) {
@@ -100,7 +102,7 @@ function reducerKeyEnter(state, action) {
     case 'hightlights':
       goTo = hightlights[indexActiveItem].url;
       break;
-    case 'suggestion':
+    case 'suggestions':
       goTo = `${URL_SEARCH_SUGGESTIONS}${sufixLink}`;
       break;
     case 'globo':
@@ -116,6 +118,9 @@ function reducerKeyEnter(state, action) {
 
   return {
     goTo,
+    term,
+    openAutocomplete: false,
+    indexActiveItem: -1,
   };
 }
 

@@ -20,7 +20,7 @@ describe("Requests reducers de requests", () => {
     indexActiveItem: -1,
     loading: false,
     completeTerm: null,
-    goTo: null,
+    goTo: null
   };
 
   it("Deve retornar o estado inicial", () => {
@@ -37,7 +37,7 @@ describe("Requests reducers de requests", () => {
     }));
   });
 
-  it("Reducer REQUEST_SUCCESS: Espera que retorno tenha o state correto com o termo nas suggestions envolvidas pela tag mark", () => {
+  it("Reducer REQUEST_SUCCESS: Espera que retorno tenha o state correto e esteja ordenado", () => {
     const data = {
       hightlights: [
         {
@@ -81,11 +81,6 @@ describe("Requests reducers de requests", () => {
         "musica",
         "musica que neymar pediu",
         "musica de anderson freire"
-      ],
-      suggestionsMarked: [
-        "<mark>mus</mark>ica",
-        "<mark>mus</mark>ica que neymar pediu",
-        "<mark>mus</mark>ica de anderson freire"
       ]
     };
 
@@ -105,6 +100,7 @@ describe("Requests reducers de requests", () => {
       completeTerm: null,
       goTo: null,
       data: {data: expectedData },
+      totalResults: 6,
     });
   });
 
@@ -130,7 +126,13 @@ describe("Testando reducers de interactions", () => {
     openAutocomplete: true,
     indexActiveItem: 2,
     goTo: null,
-    completeTerm: null
+    completeTerm: null,
+    data: {
+      data: {
+        hightlights: [],
+        suggestions: []
+      }
+    }
   };
 
   const data = {
@@ -176,11 +178,6 @@ describe("Testando reducers de interactions", () => {
       "musica",
       "musica de anderson freire",
       "musica que neymar pediu"
-    ],
-    suggestionsMarked: [
-      "<mark>mus</mark>ica",
-      "<mark>mus</mark>ica de anderson freire",
-      "<mark>mus</mark>ica que neymar pediu"
     ]
   };
 
@@ -240,13 +237,20 @@ describe("Testando reducers de interactions", () => {
 
     expect(reducer(state, {
       type: LIST_KEY_ENTER,
-      term: 'musica de anderson freire'
+      term: 'musica de anderson freire',
+      itemType: 'suggestions',
     })).toEqual({
       term: 'musica de anderson freire',
       openAutocomplete: false,
       indexActiveItem: -1,
       goTo: 'http://g1.globo.com/busca/?q=musica%20de%20anderson%20freire',
-      completeTerm: null
+      completeTerm: null,
+      data: {
+        data: {
+          hightlights: [],
+          suggestions: []
+        }
+      }
     });
   });
 
