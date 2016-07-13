@@ -14,9 +14,9 @@ class Search {
     this.dom.autocomplete = document.getElementsByClassName('autocomplete')[0];
     this.dom.autocomplete__list = document.getElementsByClassName('autocomplete__list')[0];
 
-    this.handlerInputKeyUp = this.handlerInputKeyUp.bind(this);
-    this.handlerFocusInput = this.handlerFocusInput.bind(this);
-    this.handlerBlurInput = this.handlerBlurInput.bind(this);
+    this.handleInputKeyUp = this.handleInputKeyUp.bind(this);
+    this.handleFocusInput = this.handleFocusInput.bind(this);
+    this.handleBlurInput = this.handleBlurInput.bind(this);
     this.showAutocomplete = this.showAutocomplete.bind(this);
     this.subscribe = this.subscribe.bind(this);
     this.render = this.render.bind(this);
@@ -32,7 +32,7 @@ class Search {
     this.subscribe();
   }
 
-  handlerInputKeyUp(event) {
+  handleInputKeyUp(event) {
     event.preventDefault();
     const { target: { value }, which } = event;
     const data = [value];
@@ -47,24 +47,47 @@ class Search {
     this.store.dispatch(actions(which, data));
   }
 
-  handlerFormSubmit(event) {
+  handleFormSubmit(event) {
     event.preventDefault();
   }
 
-  handlerFocusInput() {
+  handleFocusInput() {
     this.dom.search.classList.add('search-component--opened');
   }
 
-  handlerBlurInput() {
+  handleBlurInput() {
     this.dom.autocomplete.classList.remove('autocomplete--opened');
     this.dom.search.classList.remove('search-component--opened');
   }
 
+  handleMouseOverAutocomplete({ target }) {
+    if (target.nodeType !== 1 ||
+        !target.classList.contains('autocomplete__item-selectable')) {
+      return false;
+    }
+
+    let el = target;
+
+    while (el.parentNode.nodeType === 1 &&
+          !el.classList.contains('autocomplete__item-selectable')
+          ) {
+      el = el.parentNode;
+    }
+
+    return void 0;
+  }
+
+  handleMouseLeaveAutocomplete() {
+
+  }
+
   bindEvents() {
-    this.dom.input.addEventListener('keyup', this.handlerInputKeyUp);
-    this.dom.input.addEventListener('focus', this.handlerFocusInput);
-    this.dom.input.addEventListener('blur', this.handlerBlurInput);
-    this.dom.form.addEventListener('submit', this.handlerFormSubmit);
+    this.dom.input.addEventListener('keyup', this.handleInputKeyUp);
+    this.dom.input.addEventListener('focus', this.handleFocusInput);
+    this.dom.input.addEventListener('blur', this.handleBlurInput);
+    this.dom.form.addEventListener('submit', this.handleFormSubmit);
+    this.dom.autocomplete.addEventListener('mouseover', this.handleMouseOverAutocomplete);
+    this.dom.autocomplete.addEventListener('mouseleave', this.handleMouseLeaveAutocomplete);
   }
 
   subscribe() {
@@ -110,10 +133,11 @@ class Search {
       'autocomplete__item-selectable',
       'autocomplete__item--hightlights',
       this.getClassItemSelected(index),
-    ];
+    ].join(' ');
     return `<li
               data-type="hightlights"
-              class="${classesLi.join(' ')}">
+              data-index="${index}"
+              class="${classesLi}">
               <img src="${logo}" />
               <span>${title}</span>
             </li>`;
@@ -128,13 +152,14 @@ class Search {
       'autocomplete__item',
       'autocomplete__item-selectable',
       this.getClassItemSelected(index),
-    ];
+    ].join(' ');
     const term = this.store.getState().term;
     const suggestionMarked = this.addMarkTag(suggestion, term);
     return `<li
               data-type="suggestions"
               data-title="${suggestion}"
-              class="${classesLi.join(' ')}">
+              data-index="${index}"
+              class="${classesLi}">
                 ${suggestionMarked}
             </li>`;
   }
@@ -158,10 +183,11 @@ class Search {
       'autocomplete__item',
       'autocomplete__item-selectable',
       this.getClassItemSelected(index),
-    ];
+    ].join(' ');
     return `<li
               data-type="globo"
-              class="${classesLi.join(' ')}"
+              data-index="${index}"
+              class="${classesLi}"
               >
               Busca '${term}' na Globo.com
             </li>`;
@@ -172,10 +198,11 @@ class Search {
       'autocomplete__item',
       'autocomplete__item-selectable',
       this.getClassItemSelected(index),
-    ];
+    ].join(' ');
     return `<li
               data-type="web"
-              class="${classesLi.join(' ')}">
+              data-index="${index}"
+              class="${classesLi}">
                 Busca '${term}' na Web
             </li>`;
   }
