@@ -12,8 +12,7 @@ export function delegate(el, classSelector, evtType, cb) {
           ) {
       target = target.parentNode;
     }
-
     cb(target, event);
-
+    return false;
   });
 }

@@ -4,8 +4,8 @@ import {
   LIST_KEY_LEFT, LIST_KEY_UP,
   LIST_KEY_RIGHT, LIST_KEY_DOWN,
   LIST_KEY_ESC, LIST_MOUSE_OVER,
-  REQUEST_SUCCESS, REQUEST_FAILURE,
-  REQUEST_INIT,
+  LIST_MOUSE_CLICK, REQUEST_SUCCESS,
+  REQUEST_FAILURE, REQUEST_INIT,
 } from './../constants/ActionsTypes';
 import {
   URL_SEARCH_SUGGESTIONS, SEARCH_GLOBO,
@@ -79,12 +79,12 @@ function handleData({ data }) {
 }
 
 /**
- * Reducer para quando usuário clicar em Enter no teclado
+ * Gera estado com o link para qual o usuário será redirecionado
  * @param  {Object} state  Estado atual da store
  * @param  {Action} action Ação passada para reducer processar
- * @return {Object}        Link para qual a página será redirecionada
+ * @return {Object}        Novo estado
  */
-function reducerKeyEnter(state, action) {
+function handleGoto(state, action) {
   const { indexActiveItem, data } = state;
   const { data: { hightlights } } = data;
   const { term, itemType } = action;
@@ -156,7 +156,7 @@ function requests(state, action) {
 function keyPress(state, action) {
   switch (action.type) {
     case LIST_KEY_ENTER:
-      return Object.assign({}, state, reducerKeyEnter(state, action));
+      return Object.assign({}, state, handleGoto(state, action));
 
     case LIST_KEY_OTHER:
       return Object.assign({}, state, {
@@ -222,6 +222,9 @@ export default function (state, action) {
       return Object.assign({}, state, {
         indexActiveItem: parseInt(action.indexActiveItem, 10),
       });
+
+    case LIST_MOUSE_CLICK:
+      return Object.assign({}, state, handleGoto(state, action));
 
     default:
       return Object.assign({}, state, {

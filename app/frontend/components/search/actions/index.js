@@ -1,6 +1,14 @@
 import { get } from 'axios';
-import * as actionsTypes from './../constants/ActionsTypes';
 import serverConfigs from './../../../../configs/server';
+import * as actionsTypes from './../constants/ActionsTypes';
+import {
+  KEY_ENTER,
+  KEY_ESC,
+  KEY_LEFT,
+  KEY_UP,
+  KEY_RIGHT,
+  KEY_DOWN,
+} from './../constants/KeyNames';
 
 const requestInit = (term) => ({
   type: actionsTypes.REQUEST_INIT,
@@ -56,21 +64,21 @@ function fetchIfNeeded(term) {
 
 export function handleKeyboard(key, data = []) {
   switch (key) {
-    case 13:
+    case KEY_ENTER:
       return actionKeyEnter(data);
-    case 27:
+    case KEY_ESC:
       return {
         type: actionsTypes.LIST_KEY_ESC,
       };
-    case 37:
+    case KEY_LEFT:
       return actionKeyLeft(data[0]);
-    case 38:
+    case KEY_UP:
       return {
         type: actionsTypes.LIST_KEY_UP,
       };
-    case 39:
+    case KEY_RIGHT:
       return actionKeyRight(data[0]);
-    case 40:
+    case KEY_DOWN:
       return {
         type: actionsTypes.LIST_KEY_DOWN,
       };
@@ -79,9 +87,17 @@ export function handleKeyboard(key, data = []) {
   }
 }
 
-export function handleMouse(index) {
+export function handleMouseOver(index) {
   return {
     type: actionsTypes.LIST_MOUSE_OVER,
     indexActiveItem: index,
+  };
+}
+
+export function handleMouseClick(data) {
+  return {
+    type: actionsTypes.LIST_MOUSE_CLICK,
+    term: data[0],
+    itemType: data[1],
   };
 }

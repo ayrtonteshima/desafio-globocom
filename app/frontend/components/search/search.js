@@ -3,8 +3,10 @@ import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import {
   handleKeyboard,
-  handleMouse,
+  handleMouseOver,
+  handleMouseClick,
 } from './actions';
+import { KEY_ENTER } from './constants/KeyNames';
 import searchReducer from './reducers';
 import { accentsTidy } from './../../../utils';
 import { delegate } from './../../helpers/utils';
@@ -45,7 +47,7 @@ class Search {
     const { target: { value }, which } = event;
     const data = [value];
     // Todo: refatorar
-    if (which === 13) {
+    if (which === KEY_ENTER) {
       const el = document.querySelector('.autocomplete__item--selected');
       if (el) {
         const type = el.getAttribute('data-type');
@@ -64,9 +66,10 @@ class Search {
   }
 
   handleBlurInput() {
-    if (this.ignoreBlur) return null;
-    this.dom.autocomplete.classList.remove('autocomplete--opened');
-    this.dom.search.classList.remove('search-component--opened');
+    if (!this.ignoreBlur) {
+      this.dom.autocomplete.classList.remove('autocomplete--opened');
+      this.dom.search.classList.remove('search-component--opened');
+    }
   }
 
   bindEvents() {
@@ -88,11 +91,11 @@ class Search {
   bindItemOverAutocomplete() {
     const me = this;
 
-    delegate(this.dom.autocomplete, 'autocomplete__item-selectable', 'mouseover', (el, event) => {
+    delegate(this.dom.autocomplete, 'autocomplete__item-selectable', 'mouseover', (el) => {
       const currentIndex = me.store.getState().indexActiveItem;
       const nextIndex = parseInt(el.getAttribute('data-index'), 10);
       if (currentIndex !== nextIndex) {
-        me.store.dispatch(handleMouse(nextIndex));
+        me.store.dispatch(handleMouseOver(nextIndex));
       }
       return void 0;
     });
@@ -100,10 +103,14 @@ class Search {
 
   bindItemClickAutocomplete() {
     const me = this;
-    delegate(this.dom.autocomplete, 'autocomplete__item-selectable', 'click', (el, event) => {
-      const currentIndex = me.store.getState().indexActiveItem;
-      const nextIndex = parseInt(el.getAttribute('data-index'), 10);
-      console.log("HERE ", nextIndex);
+    delegate(this.dom.autocomplete, 'autocomplete__item-selectable', 'click', () => {
+      const data = [this.dom.input.value];
+      const el = document.querySelector('.autocomplete__item--selected');
+      if (el) {
+        const type = el.getAttribute('data-type');
+        data.push(type);
+      }
+      me.store.dispatch(handleMouseClick(data));
       return void 0;
     });
   }
