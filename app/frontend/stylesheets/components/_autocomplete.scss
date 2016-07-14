@@ -60,7 +60,7 @@
         &-selectable {
             padding: 5px 10px;
             border-left: 3px solid transparent;
-            &:hover, &.autocomplete__item--selected {
+            &.autocomplete__item--selected {
                 border-left: 3px solid $lightRed;
                 background-color: #f1f1f1;
                 color: $lightRed;

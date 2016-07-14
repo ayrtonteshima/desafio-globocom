@@ -7,6 +7,7 @@ import {
 } from './actions';
 import searchReducer from './reducers';
 import { accentsTidy } from './../../../utils';
+import { delegate } from './../../helpers/utils';
 
 class Search {
   constructor() {
@@ -17,11 +18,14 @@ class Search {
     this.dom.autocomplete = document.getElementsByClassName('autocomplete')[0];
     this.dom.autocomplete__list = document.getElementsByClassName('autocomplete__list')[0];
 
+    this.ignoreBlur = false;
+
     this.handleInputKeyUp = this.handleInputKeyUp.bind(this);
     this.handleFocusInput = this.handleFocusInput.bind(this);
     this.handleBlurInput = this.handleBlurInput.bind(this);
     this.showAutocomplete = this.showAutocomplete.bind(this);
-    this.handleMouseOverAutocomplete = this.handleMouseOverAutocomplete.bind(this);
+    this.bindItemOverAutocomplete = this.bindItemOverAutocomplete.bind(this);
+    this.bindItemClickAutocomplete = this.bindItemClickAutocomplete.bind(this);
     this.subscribe = this.subscribe.bind(this);
     this.render = this.render.bind(this);
 
@@ -60,32 +64,9 @@ class Search {
   }
 
   handleBlurInput() {
+    if (this.ignoreBlur) return null;
     this.dom.autocomplete.classList.remove('autocomplete--opened');
     this.dom.search.classList.remove('search-component--opened');
-  }
-
-  handleMouseOverAutocomplete({ target }) {
-    // Todo: refatorar, problema com hover nos filhos
-    if (target.nodeType !== 1 ||
-        !target.classList.contains('autocomplete__item-selectable')) {
-      return false;
-    }
-
-    let el = target;
-
-    while (el.parentNode.nodeType === 1 &&
-          !el.classList.contains('autocomplete__item-selectable')
-          ) {
-      el = el.parentNode;
-    }
-
-    const index = el.getAttribute('data-index');
-    this.store.dispatch(handleMouse(index));
-    return void 0;
-  }
-
-  handleMouseLeaveAutocomplete() {
-
   }
 
   bindEvents() {
@@ -93,8 +74,38 @@ class Search {
     this.dom.input.addEventListener('focus', this.handleFocusInput);
     this.dom.input.addEventListener('blur', this.handleBlurInput);
     this.dom.form.addEventListener('submit', this.handleFormSubmit);
-    this.dom.autocomplete.addEventListener('mouseover', this.handleMouseOverAutocomplete);
-    this.dom.autocomplete.addEventListener('mouseleave', this.handleMouseLeaveAutocomplete);
+    this.dom.autocomplete.addEventListener('mousedown', () => {
+      this.ignoreBlur = true;
+    });
+    this.dom.autocomplete.addEventListener('mouseup', () => {
+      this.ignoreBlur = false;
+      this.handleBlurInput();
+    });
+    this.bindItemClickAutocomplete();
+    this.bindItemOverAutocomplete();
+  }
+
+  bindItemOverAutocomplete() {
+    const me = this;
+
+    delegate(this.dom.autocomplete, 'autocomplete__item-selectable', 'mouseover', (el, event) => {
+      const currentIndex = me.store.getState().indexActiveItem;
+      const nextIndex = parseInt(el.getAttribute('data-index'), 10);
+      if (currentIndex !== nextIndex) {
+        me.store.dispatch(handleMouse(nextIndex));
+      }
+      return void 0;
+    });
+  }
+
+  bindItemClickAutocomplete() {
+    const me = this;
+    delegate(this.dom.autocomplete, 'autocomplete__item-selectable', 'click', (el, event) => {
+      const currentIndex = me.store.getState().indexActiveItem;
+      const nextIndex = parseInt(el.getAttribute('data-index'), 10);
+      console.log("HERE ", nextIndex);
+      return void 0;
+    });
   }
 
   subscribe() {
@@ -119,8 +130,7 @@ class Search {
   setValueInputKeyUpAndDown(term) {
     const selected = document.querySelector('.autocomplete__item--selected');
     if (selected && selected.getAttribute('data-title')) {
-      this.dom.input.value = document.querySelector('.autocomplete__item--selected')
-                                      .getAttribute('data-title');
+      this.dom.input.value = selected.getAttribute('data-title');
     } else {
       this.dom.input.value = term;
     }
