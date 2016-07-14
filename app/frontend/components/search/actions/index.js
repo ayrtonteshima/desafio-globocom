@@ -87,10 +87,10 @@ export function handleKeyboard(key, data = []) {
   }
 }
 
-export function handleMouseOver(index) {
+export function handleMouseOver(indexActiveItem) {
   return {
     type: actionsTypes.LIST_MOUSE_OVER,
-    indexActiveItem: index,
+    indexActiveItem,
   };
 }
 

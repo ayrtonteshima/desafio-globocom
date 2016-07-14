@@ -3,7 +3,8 @@ import thunk from 'redux-thunk';
 import nock from 'nock';
 import {
   handleKeyboard,
-  handleMouse,
+  handleMouseOver,
+  handleMouseClick,
 } from './../../../../../app/frontend/components/search/actions';
 import {
   LIST_KEY_UP,
@@ -84,13 +85,13 @@ describe("Testando action creators de interactions do teclado", () => {
 });
 
 describe("Testando action creators de interações do mouse", () => {
-  it("Testa quando mouse passa em cima do terceiro item da lista do autocomplete", () => {
+  it("Testa quando mouse passa em cima do terceiro item da lista do autocomplete, espera indexActiveItem 3", () => {
     const expectedAction = {
       type: LIST_MOUSE_OVER,
-      index: 3
+      indexActiveItem: 3
     };
 
-    expected(actions(LIST_MOUSE_OVER).toEqual(expectedAction));
+    expect(handleMouseOver(3)).toEqual(expectedAction);
   });
 });
 

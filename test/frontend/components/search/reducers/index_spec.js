@@ -19,8 +19,10 @@ describe("Requests reducers de requests", () => {
     term: '',
     indexActiveItem: -1,
     loading: false,
+    goTo: null,
     completeTerm: null,
-    goTo: null
+    totalResults: 0,
+    data: {},
   };
 
   it("Deve retornar o estado inicial", () => {
@@ -125,14 +127,10 @@ describe("Testando reducers de interactions", () => {
     term: 'mús',
     openAutocomplete: true,
     indexActiveItem: 2,
+    loading: false,
     goTo: null,
     completeTerm: null,
-    data: {
-      data: {
-        hightlights: [],
-        suggestions: []
-      }
-    }
+    data: {}
   };
 
   const data = {
@@ -182,15 +180,17 @@ describe("Testando reducers de interactions", () => {
   };
 
   it("Valida retorno quando LIST_MOUSE_OVER", () => {
-    expect(reducer(undefined, {
+    expect(reducer(initialState, {
       type: LIST_MOUSE_OVER,
-      index: 3
+      indexActiveItem: 3,
     })).toEqual({
       term: 'mús',
       openAutocomplete: true,
       indexItemActive: 3,
       goTo: null,
-      completeTerm: null
+      loading: false,
+      completeTerm: null,
+      totalResults: 0
     });
   });
 
@@ -212,6 +212,7 @@ describe("Testando reducers de interactions", () => {
       term: 'mús',
       openAutocomplete: true,
       indexActiveItem: 3,
+      loading: false,
       goTo: null,
       completeTerm: null,
       data: dataMock
@@ -225,8 +226,10 @@ describe("Testando reducers de interactions", () => {
       term: 'mús',
       openAutocomplete: true,
       indexActiveItem: 1,
+      loading: false,
       goTo: null,
-      completeTerm: null
+      completeTerm: null,
+      data: {},
     })
   });
 
@@ -243,14 +246,10 @@ describe("Testando reducers de interactions", () => {
       term: 'musica de anderson freire',
       openAutocomplete: false,
       indexActiveItem: -1,
+      loading: false,
       goTo: 'http://g1.globo.com/busca/?q=musica%20de%20anderson%20freire',
       completeTerm: null,
-      data: {
-        data: {
-          hightlights: [],
-          suggestions: []
-        }
-      }
+      data: {}
     });
   });
 
@@ -265,8 +264,9 @@ describe("Testando reducers de interactions", () => {
     })).toEqual({
       term: 'musica de anderson freire',
       openAutocomplete: false,
+      loading: false,
       goTo: 'http://g1.globo.com/busca/?q=musica%20de%20anderson%20freire',
-      indexItemActive: -1,
+      indexItemActive: 1,
       completeTerm: null
     });
   });

@@ -221,6 +221,7 @@ export default function (state, action) {
     case LIST_MOUSE_OVER:
       return Object.assign({}, state, {
         indexActiveItem: parseInt(action.indexActiveItem, 10),
+        openAutocomplete: true,
       });
 
     case LIST_MOUSE_CLICK:

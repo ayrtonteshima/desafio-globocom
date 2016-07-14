@@ -6,4 +6,5 @@ export default {
   goTo: null,
   completeTerm: null,
   totalResults: 0,
+  data: {}
 };
