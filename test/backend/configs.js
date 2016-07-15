@@ -1,8 +1,8 @@
-var HOST = process.env.HOST || 'localhost';
-var PORT = process.env.PORT || 8080;
-
+const HOST = '0.0.0.0';
+const PORT = 9999;
 module.exports = {
-  host: HOST,
-  port: PORT,
+  host: '0.0.0.0',
+  port: 9999,
+
   baseApiUrl: 'http://' + HOST + ':' + PORT + '/'
 };

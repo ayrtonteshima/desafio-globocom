@@ -5,6 +5,6 @@ export default {
   loading: false,
   goTo: null,
   completeTerm: null,
+  data: {},
   totalResults: 0,
-  data: {}
 };

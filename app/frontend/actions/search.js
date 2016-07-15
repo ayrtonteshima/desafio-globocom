@@ -1,5 +1,5 @@
 import { get } from 'axios';
-import serverConfigs from './../../../../configs/server';
+import serverConfigs from './../../configs/server';
 import * as actionsTypes from './../constants/ActionsTypes';
 import {
   KEY_ENTER,

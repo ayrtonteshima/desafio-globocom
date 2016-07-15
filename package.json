@@ -8,9 +8,9 @@
     "test:backend": "jasmine-node ./test/backend/api",
     "test:frontend": "karma start karma.conf.js",
     "test": "npm run test:backend && npm run test:frontend",
-    "prepareBuild": "rm -fr ./public || mkdir ./public",
+    "prepareBuild": "rm -fr ./public/css ./public/js ./public/index.html || mkdir ./public ./public/css ./public/img",
     "build": "npm run prepareBuild && webpack",
-    "server": "nodemon ./index.js",
+    "server": "PORT=9999 nodemon ./index.js",
     "lint": "eslint --cache ."
   },
   "repository": {

@@ -5,11 +5,11 @@ import {
   handleKeyboard,
   handleMouseOver,
   handleMouseClick,
-} from './actions';
+} from './actions/search';
 import { KEY_ENTER } from './constants/KeyNames';
 import searchReducer from './reducers';
-import { accentsTidy } from './../../../utils';
-import { delegate } from './../../helpers/utils';
+import { accentsTidy } from './../utils';
+import { delegate } from './helpers/utils';
 
 class Search {
   constructor() {
@@ -28,6 +28,7 @@ class Search {
     this.showAutocomplete = this.showAutocomplete.bind(this);
     this.bindItemOverAutocomplete = this.bindItemOverAutocomplete.bind(this);
     this.bindItemClickAutocomplete = this.bindItemClickAutocomplete.bind(this);
+    this.getState = this.getState.bind(this);
     this.subscribe = this.subscribe.bind(this);
     this.render = this.render.bind(this);
 
@@ -39,7 +40,12 @@ class Search {
         applyMiddleware(thunk, logger())
         )
       );
+
     this.subscribe();
+  }
+
+  getState() {
+    return this.store.getState().search;
   }
 
   handleInputKeyUp(event) {
@@ -92,7 +98,7 @@ class Search {
     const me = this;
 
     delegate(this.dom.autocomplete, 'autocomplete__item-selectable', 'mouseover', (el) => {
-      const currentIndex = me.store.getState().indexActiveItem;
+      const currentIndex = me.getState().indexActiveItem;
       const nextIndex = parseInt(el.getAttribute('data-index'), 10);
       if (currentIndex !== nextIndex) {
         me.store.dispatch(handleMouseOver(nextIndex));
@@ -121,7 +127,7 @@ class Search {
   }
 
   showAutocomplete() {
-    const open = this.store.getState().openAutocomplete;
+    const open = this.getState().openAutocomplete;
     this.dom
     .autocomplete
     .classList
@@ -129,17 +135,21 @@ class Search {
   }
 
   getClassItemSelected(index) {
-    return index === this.store.getState().indexActiveItem ?
+    return index === this.getState().indexActiveItem ?
     'autocomplete__item--selected' :
     '';
   }
 
   setValueInputKeyUpAndDown(term) {
-    const selected = document.querySelector('.autocomplete__item--selected');
-    if (selected && selected.getAttribute('data-title')) {
-      this.dom.input.value = selected.getAttribute('data-title');
+    if (this.getState().completeTerm) {
+      this.dom.input.value = this.getState().completeTerm;
     } else {
-      this.dom.input.value = term;
+      const selected = document.querySelector('.autocomplete__item--selected');
+      if (selected && selected.getAttribute('data-title')) {
+        this.dom.input.value = selected.getAttribute('data-title');
+      } else {
+        this.dom.input.value = term;
+      }
     }
   }
 
@@ -177,7 +187,7 @@ class Search {
       'autocomplete__item-selectable',
       this.getClassItemSelected(index),
     ].join(' ');
-    const term = this.store.getState().term;
+    const term = this.getState().term;
     const suggestionMarked = this.addMarkTag(suggestion, term);
     return `<li
               data-type="suggestions"
@@ -232,12 +242,12 @@ class Search {
   }
 
   render() {
-    if (this.store.getState().goTo) {
-      window.location.href = this.store.getState().goTo;
+    if (this.getState().goTo) {
+      window.location.href = this.getState().goTo;
     }
-    if (!this.store.getState().openAutocomplete) return null;
+    if (!this.getState().openAutocomplete) return null;
 
-    const state = this.store.getState();
+    const state = this.getState();
     const { term, data: { data } } = state;
     const totalHightlights = data.hightlights.length;
     const totalSuggestions = data.suggestions.length;

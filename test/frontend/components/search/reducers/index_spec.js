@@ -1,4 +1,4 @@
-import reducer from './../../../../../app/frontend/components/search/reducers';
+import reducer from './../../../../../app/frontend/reducers/search';
 import {
   LIST_KEY_UP,
   LIST_KEY_DOWN,
@@ -7,23 +7,15 @@ import {
   LIST_KEY_ESC,
   LIST_KEY_ENTER,
   LIST_MOUSE_OVER,
+  LIST_MOUSE_CLICK,
   REQUEST_INIT,
   REQUEST_SUCCESS,
   REQUEST_FAILURE
-} from './../../../../../app/frontend/components/search/constants/ActionsTypes';
+} from './../../../../../app/frontend/constants/ActionsTypes';
+import initialState from './../../../../../app/frontend/configs/searchInitialState';
 
 describe("Requests reducers de requests", () => {
   const term = 'mús';
-  const initialState = {
-    openAutocomplete: false,
-    term: '',
-    indexActiveItem: -1,
-    loading: false,
-    goTo: null,
-    completeTerm: null,
-    totalResults: 0,
-    data: {},
-  };
 
   it("Deve retornar o estado inicial", () => {
     expect(reducer(undefined, {})).toEqual(initialState);
@@ -111,28 +103,11 @@ describe("Requests reducers de requests", () => {
       type: REQUEST_FAILURE,
       term,
       data: []
-    })).toEqual({
-      openAutocomplete: false,
-      term: 'mús',
-      indexActiveItem: -1,
-      loading: false,
-      completeTerm: null  ,
-      goTo: null
-    });
+    })).toEqual(initialState);
   });
 });
 
 describe("Testando reducers de interactions", () => {
-  const initialState = {
-    term: 'mús',
-    openAutocomplete: true,
-    indexActiveItem: 2,
-    loading: false,
-    goTo: null,
-    completeTerm: null,
-    data: {}
-  };
-
   const data = {
     hightlights: [
       {
@@ -183,15 +158,10 @@ describe("Testando reducers de interactions", () => {
     expect(reducer(initialState, {
       type: LIST_MOUSE_OVER,
       indexActiveItem: 3,
-    })).toEqual({
-      term: 'mús',
+    })).toEqual(Object.assign({}, initialState, {
+      indexActiveItem: 3,
       openAutocomplete: true,
-      indexItemActive: 3,
-      goTo: null,
-      loading: false,
-      completeTerm: null,
-      totalResults: 0
-    });
+    }));
   });
 
   it("Valida retorno quando LIST_KEY_DOWN", () => {
@@ -202,105 +172,190 @@ describe("Testando reducers de interactions", () => {
       }
     };
     const previousState = Object.assign({}, initialState, {
-      data: dataMock
+      data: dataMock,
+      indexActiveItem: 2,
+      totalResults: 6,
+      openAutocomplete: true,
+    });
+
+    const expectedReturn = Object.assign({}, initialState, {
+      openAutocomplete: true,
+      indexActiveItem: 3,
+      data: dataMock,
+      totalResults: 6,
     });
 
     expect(reducer(previousState, {
       type: LIST_KEY_DOWN,
-      index: 2
-    })).toEqual({
-      term: 'mús',
-      openAutocomplete: true,
-      indexActiveItem: 3,
-      loading: false,
-      goTo: null,
-      completeTerm: null,
-      data: dataMock
-    })
+      indexActiveItem: 2,
+      data: dataMock,
+    })).toEqual(expectedReturn);
   });
 
   it("Valida retorno quando LIST_KEY_UP", () => {
-    expect(reducer(initialState, {
-      type: LIST_KEY_UP
-    })).toEqual({
-      term: 'mús',
+    const dataMock = {
+      data: {
+        hightlights: [{}],
+        suggestions: ['', '', '']
+      }
+    };
+
+    const previousState = Object.assign({}, initialState, {
+      data: dataMock,
+      indexActiveItem: 2,
+      totalResults: 6,
+      openAutocomplete: true,
+    });
+
+    const expectedReturn = Object.assign({}, initialState, {
       openAutocomplete: true,
       indexActiveItem: 1,
-      loading: false,
-      goTo: null,
-      completeTerm: null,
-      data: {},
-    })
+      data: dataMock,
+      totalResults: 6,
+    });
+
+    expect(reducer(previousState, {
+      type: LIST_KEY_UP,
+      indexActiveItem: 2,
+      data: dataMock,
+    })).toEqual(expectedReturn)
   });
 
   it("Valida retorno quando LIST_KEY_ENTER", () => {
+
+    const dataMock = {
+      data: {
+        hightlights: [{
+             "title":"Pop & Art",
+             "url":"http://g1.globo.com/pop-arte/index.html",
+             "logo":"http://s.glbimg.com/bu/i/fc/5fb2e18d-a47f-4bb8-9a7e-b66871cf53c0.png",
+             "queries":[
+                "música",
+                "pop",
+                "art",
+                "arte",
+                "cultura",
+                "shows"
+             ]
+        }],
+        suggestions: [
+          "musica",
+          "musica de anderson freire",
+          "musica que neymar pediu",
+        ],
+      }
+    };
+
     const state = Object.assign({}, initialState, {
-      indexActiveItem: 1
+      term: 'mus',
+      indexActiveItem: -1,
+      data: dataMock,
     });
 
-    expect(reducer(state, {
-      type: LIST_KEY_ENTER,
-      term: 'musica de anderson freire',
-      itemType: 'suggestions',
-    })).toEqual({
+    const expectedReturn = Object.assign({}, initialState, {
       term: 'musica de anderson freire',
       openAutocomplete: false,
       indexActiveItem: -1,
       loading: false,
       goTo: 'http://g1.globo.com/busca/?q=musica%20de%20anderson%20freire',
       completeTerm: null,
-      data: {}
+      data: dataMock,
     });
+
+    expect(reducer(state, {
+      type: LIST_KEY_ENTER,
+      term: 'musica de anderson freire',
+      itemType: 'suggestions',
+    })).toEqual(expectedReturn);
   });
 
+
+
   it("Valida retorno quando LIST_MOUSE_CLICK", () => {
+    const dataMock = {
+      data: {
+        hightlights: [{
+             "title":"Pop & Art",
+             "url":"http://g1.globo.com/pop-arte/index.html",
+             "logo":"http://s.glbimg.com/bu/i/fc/5fb2e18d-a47f-4bb8-9a7e-b66871cf53c0.png",
+             "queries":[
+                "música",
+                "pop",
+                "art",
+                "arte",
+                "cultura",
+                "shows"
+             ]
+        }],
+        suggestions: [
+          "musica",
+          "musica de anderson freire",
+          "musica que neymar pediu",
+        ],
+      }
+    };
+
     const state = Object.assign({}, initialState, {
-      indexActiveItem: 1
+      term: 'mus',
+      indexActiveItem: 1,
+      data: dataMock,
+    });
+
+    const expectedReturn = Object.assign({}, initialState, {
+      term: 'musica de anderson freire',
+      openAutocomplete: false,
+      indexActiveItem: -1,
+      loading: false,
+      goTo: 'http://g1.globo.com/busca/?q=musica%20de%20anderson%20freire',
+      completeTerm: null,
+      data: dataMock,
     });
 
     expect(reducer(state, {
       type: LIST_MOUSE_CLICK,
-      term: 'musica de anderson freire'
-    })).toEqual({
       term: 'musica de anderson freire',
-      openAutocomplete: false,
-      loading: false,
-      goTo: 'http://g1.globo.com/busca/?q=musica%20de%20anderson%20freire',
-      indexItemActive: 1,
-      completeTerm: null
-    });
+      itemType: 'suggestions',
+    })).toEqual(expectedReturn);
   });
 
   it("Valida retorno quando LIST_KEY_LEFT", () => {
     const previousState = Object.assign({}, initialState, {
       term: 'mús',
-      completeTerm: 'musica'
+      completeTerm: 'musica',
+      data: {
+        data: {
+          suggestions: ['musica']
+        }
+      }
+    });
+
+    const expectedReturn = Object.assign({}, previousState, {
+      completeTerm: null,
+      indexActiveItem: -1,
     });
 
     expect(reducer(previousState, {
       type: LIST_KEY_LEFT
-    })).toEqual({
-      term: 'mús',
-      openAutocomplete: true,
-      goTo: null,
-      indexItemActive: state.indexActiveItem,
-      completeTerm: null
-    });
+    })).toEqual(expectedReturn);
   });
 
   it("Valida retorno quando LIST_KEY_RIGHT", () => {
     const previousState = Object.assign({}, initialState, {
-      term: 'mús'
+      term: 'mús',
+      data: {
+        data: {
+          suggestions: ['musica']
+        }
+      }
+    });
+
+    const expectedReturn = Object.assign({}, previousState, {
+      completeTerm: 'musica',
+      indexActiveItem: -1,
     });
 
     expect(reducer(previousState, {
       type: LIST_KEY_RIGHT
-    })).toEqual({
-      term: 'mús',
-      openAutocomplete: true,
-      goTo: null,
-      indexItemActive: state.indexActiveItem,
-      completeTerm: 'musica'
-    });
+    })).toEqual(expectedReturn);
   });
 });

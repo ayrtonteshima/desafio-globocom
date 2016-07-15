@@ -5,7 +5,7 @@ import {
   handleKeyboard,
   handleMouseOver,
   handleMouseClick,
-} from './../../../../../app/frontend/components/search/actions';
+} from './../../../../../app/frontend/actions/search';
 import {
   LIST_KEY_UP,
   LIST_KEY_DOWN,
@@ -17,7 +17,7 @@ import {
   REQUEST_INIT,
   REQUEST_SUCCESS,
   REQUEST_FAILURE,
-} from './../../../../../app/frontend/components/search/constants/ActionsTypes';
+} from './../../../../../app/frontend/constants/ActionsTypes';
 
 const middlewares = [ thunk ];
 const mockStore = configureMockStore(middlewares);

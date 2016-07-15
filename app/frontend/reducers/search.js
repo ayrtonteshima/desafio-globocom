@@ -1,4 +1,4 @@
-import initialState from './../configs/initialState';
+import initialState from './../configs/searchInitialState';
 import {
   LIST_KEY_ENTER, LIST_KEY_OTHER,
   LIST_KEY_LEFT, LIST_KEY_UP,
@@ -37,6 +37,23 @@ function handlePrevIndex({ indexActiveItem, data }) {
     return -1;
   }
   return index;
+}
+
+/**
+ * Pega o primeiro termo de sugestões quando clicado para a direita no teclado
+ * @param  {Object} state Estado da store
+ * @return {Object}       Primeiro termo de sugestões
+ */
+function handleKeyRight(state) {
+  if (state.indexActiveItem !== -1) {
+    return state;
+  }
+  const completeTerm = state.data.data && state.data.data.suggestions.length > 0 ?
+                      state.data.data.suggestions[0] :
+                      null;
+  return {
+    completeTerm,
+  };
 }
 
 /**
@@ -107,7 +124,7 @@ function handleGoto(state, action) {
       goTo = `${SEARCH_WEB}${sufixLink}`;
       break;
     default:
-      goTo = `${SEARCH_GLOBO}${sufixLink}`;
+      goTo = `${URL_SEARCH_SUGGESTIONS}${sufixLink}`;
       break;
   }
 
@@ -167,19 +184,34 @@ function keyPress(state, action) {
       });
 
     case LIST_KEY_LEFT:
-      return Object.assign({}, state, {});
+      if (state.indexActiveItem !== -1) {
+        return state;
+      }
+      return Object.assign({}, state, {
+        completeTerm: null,
+      });
 
     case LIST_KEY_UP:
+      if (!state.openAutocomplete) {
+        return state;
+      }
       return Object.assign({}, state, {
         indexActiveItem: handlePrevIndex(state),
+        totalResults: getTotalResults(state.data),
+        completeTerm: null,
       });
 
     case LIST_KEY_RIGHT:
-      return Object.assign({}, state, {});
+      return Object.assign({}, state, handleKeyRight(state));
 
     case LIST_KEY_DOWN:
+      if (!state.openAutocomplete) {
+        return state;
+      }
       return Object.assign({}, state, {
         indexActiveItem: handleNextIndex(state),
+        totalResults: getTotalResults(state.data),
+        completeTerm: null,
       });
 
     case LIST_KEY_ESC:
